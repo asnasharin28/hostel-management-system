@@ -6,8 +6,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  //TextEditingController _emailController = TextEditingController();
+ // TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

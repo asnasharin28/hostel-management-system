@@ -75,25 +75,10 @@ class _StaffPage2State extends State<StaffPage2> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color(0xFFCE5A67),
               ),
-              child: PopupMenuButton<String>(
-                onSelected: (value) {
-                  // Handle the selected menu item
-                  print(value);
+              child: GestureDetector(
+                onTap: () {
+                  _showAlertDialog();
                 },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'Option 1',
-                    child: Text('Option 1'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Option 2',
-                    child: Text('Option 2'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Option 3',
-                    child: Text('Option 3'),
-                  ),
-                ],
                 child: Text(
                   'Mess Poll',
                   style: TextStyle(
@@ -108,4 +93,64 @@ class _StaffPage2State extends State<StaffPage2> {
       ),
     );
   }
+
+  void _showAlertDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Container(
+          width: 200.0, // Set your desired width
+          height: 200.0, // Set your desired height
+          child: Column(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 1
+                  print("Option 1");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("No of students:"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 2
+                  print("Option 2");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("     Mess In:"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 3
+                  print("Option 3");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("     Mess Out:"),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the AlertDialog
+            },
+            child: Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
+}
 }

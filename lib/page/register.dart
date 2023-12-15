@@ -23,21 +23,21 @@ class _RegisterPageState extends State<RegisterPage> {
   final _Year = TextEditingController();
   final _emailController = TextEditingController();
   final _PasswordController = TextEditingController();
+  final _GraduationController = TextEditingController();
 
   Future Register(
-      String Name,
-      String Department,
-      String PhoneNo,
-      String AdmissionNo,
-      String BloodGroup,
-      String ParentName,
-      String GPhoneNo,
-      String RoomNo,
-      String Year) async {
-    await FirebaseFirestore.instance
-        .collection('students')
-        .doc('stddetails')
-        .set({
+    String Name,
+    String Department,
+    String PhoneNo,
+    String AdmissionNo,
+    String BloodGroup,
+    String ParentName,
+    String GPhoneNo,
+    String RoomNo,
+    String Year,
+    String Graduation,
+  ) async {
+    await FirebaseFirestore.instance.collection('students').add({
       'Name': Name,
       'Department': Department,
       'PhoneNO': PhoneNo,
@@ -47,6 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'GPhoneNo': GPhoneNo,
       'RoomNo': RoomNo,
       'Year': Year,
+      'Graduation': Graduation,
     });
   }
 
@@ -60,6 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _PhoneNo.dispose();
     _RoomNo.dispose();
     _Year.dispose();
+    _GraduationController.dispose();
     super.dispose();
   }
 
@@ -104,6 +106,23 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   labelText: "Name",
+                  labelStyle: TextStyle(
+                    color: Color(0xFFCE5A67),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _GraduationController,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                      color: Color(0xFFCE5A67),
+                      width: 3,
+                    ),
+                  ),
+                  labelText: "UG/PG/B-ED",
                   labelStyle: TextStyle(
                     color: Color(0xFFCE5A67),
                   ),
@@ -274,6 +293,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         _PhoneNo.text.trim(),
                         _RoomNo.text.trim(),
                         _Year.text.trim(),
+                        _GraduationController.text.trim(),
                       );
                     },
                     child: Text(

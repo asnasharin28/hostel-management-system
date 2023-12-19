@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/staff1.dart';
 import 'staff1.dart';
+import 'package:my_flutter_app/page/register_staff.dart';
 
 class WardenPage extends StatefulWidget {
   @override
@@ -12,10 +13,10 @@ class WardenPage extends StatefulWidget {
 
 class _WardenPageState extends State<WardenPage> {
 
-  void _handlestaff1ContainerClick() {
+  void _handleregister_staffContainerClick() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => StaffPage1()),
+      MaterialPageRoute(builder: (context) => register_staff()),
     );
   }
   @override
@@ -84,7 +85,7 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: _handlestaff1ContainerClick,
+              onTap: _handleregister_staffContainerClick,
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -141,7 +142,7 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: _handlestaff1ContainerClick,
+              onTap: _handleregister_staffContainerClick,
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),

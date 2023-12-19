@@ -1,65 +1,50 @@
-// ignore_for_file: unused_import, unused_field
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatefulWidget {
+class register_parent extends StatefulWidget {
+  const register_parent({Key? key}) : super(key: key);
+
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  State<register_parent> createState() => __register_parentStateState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class __register_parentStateState extends State<register_parent> {
   final _Name = TextEditingController();
-  final _Department = TextEditingController();
   final _PhoneNo = TextEditingController();
-  final _AdmissionNo = TextEditingController();
-  final _BloodGroup = TextEditingController();
-  final _ParentName = TextEditingController();
-  final _GPhoneNo = TextEditingController();
+  final _StudentName = TextEditingController();
+  final _StudentPhoneNO = TextEditingController();
   final _RoomNo = TextEditingController();
-  final _Year = TextEditingController();
+
   final _emailController = TextEditingController();
   final _PasswordController = TextEditingController();
 
-  Future Register(
+   Future Register(
       String Name,
-      String Department,
-      String PhoneNo,
-      String AdmissionNo,
-      String BloodGroup,
-      String ParentName,
-      String GPhoneNo,
+      String PhoneNO,
+      String StudentName,
+      String StudentPhoneNO,
       String RoomNo,
-      String Year) async {
+     ) async {
     await FirebaseFirestore.instance
         .collection('students')
         
         .add({
       'Name': Name,
-      'Department': Department,
-      'PhoneNO': PhoneNo,
-      'AdmissionNO': AdmissionNo,
-      'BloodGroup': BloodGroup,
-      'ParentName': ParentName,
-      'GPhoneNo': GPhoneNo,
-      'RoomNo': RoomNo,
-      'Year': Year,
+      'PhoneNO': PhoneNO,
+      'StudentName': StudentName,
+      'StudentPhoneNO': StudentPhoneNO,
+      'RoomNO': RoomNo,
     });
   }
 
   void dispose() {
     _Name.dispose();
-    _AdmissionNo.dispose();
-    _BloodGroup.dispose();
-    _Department.dispose();
-    _GPhoneNo.dispose();
-    _ParentName.dispose();
     _PhoneNo.dispose();
+    _StudentName.dispose();
+    _StudentPhoneNO.dispose();
     _RoomNo.dispose();
-    _Year.dispose();
     super.dispose();
   }
 
@@ -91,59 +76,25 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextField(
-                controller: _Name,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextField(
+                  controller: _Name,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Name",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _Department,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFCE5A67),
-                      width: 3,
-                    ),
-                  ),
-                  labelText: "Department",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _Year,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFCE5A67),
-                      width: 3,
-                    ),
-                  ),
-                  labelText: "Year",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
+                 SizedBox(height: 20),
               TextField(
                 controller: _PhoneNo,
                 decoration: InputDecoration(
@@ -154,15 +105,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 3,
                     ),
                   ),
-                  labelText: "Phone No",
+                  labelText: "Phone NO",
                   labelStyle: TextStyle(
                     color: Color(0xFFCE5A67),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+               SizedBox(height: 20),
               TextField(
-                controller: _AdmissionNo,
+                controller: _StudentName,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -171,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 3,
                     ),
                   ),
-                  labelText: "Admission No",
+                  labelText: "Student Name",
                   labelStyle: TextStyle(
                     color: Color(0xFFCE5A67),
                   ),
@@ -179,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               SizedBox(height: 20),
               TextField(
-                controller: _BloodGroup,
+                controller: _StudentPhoneNO,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -188,10 +139,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 3,
                     ),
                   ),
-                  labelText: "Blood Group",
+                  labelText: "Student Phone NO",
                   labelStyle: TextStyle(
                     color: Color(0xFFCE5A67),
                   ),
+                  
                 ),
               ),
               SizedBox(height: 20),
@@ -205,46 +157,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 3,
                     ),
                   ),
-                  labelText: "Room No",
+                  labelText: "Room NO",
                   labelStyle: TextStyle(
                     color: Color(0xFFCE5A67),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _ParentName,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFCE5A67),
-                      width: 3,
-                    ),
-                  ),
-                  labelText: "Parent Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _GPhoneNo,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFCE5A67),
-                      width: 3,
-                    ),
-                  ),
-                  labelText: "Phone No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
-                ),
-              ),
+              
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -266,14 +185,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () {
                       Register(
                         _Name.text.trim(),
-                        _Department.text.trim(),
                         _PhoneNo.text.trim(),
-                        _AdmissionNo.text.trim(),
-                        _BloodGroup.text.trim(),
-                        _ParentName.text.trim(),
-                        _PhoneNo.text.trim(),
+                        _StudentName.text.trim(),
+                        _StudentPhoneNO.text.trim(),
                         _RoomNo.text.trim(),
-                        _Year.text.trim(),
+                        
                       );
                     },
                     child: Text(
@@ -283,8 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     )),
               ),
-            ],
-          ),
+              ]),
         ),
       ),
     );

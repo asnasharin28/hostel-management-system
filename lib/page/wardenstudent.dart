@@ -4,9 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_flutter_app/page/register.dart';
+import 'package:my_flutter_app/page/warden2.dart';
 
 class WardenStudent extends StatefulWidget {
-  const WardenStudent({super.key});
+  final String selectedDegree;
+  final String selectedYear;
+
+  const WardenStudent(
+      {Key? key, required this.selectedDegree, required this.selectedYear})
+      : super(key: key);
 
   @override
   State<WardenStudent> createState() => _WardenStudentState();
@@ -30,9 +36,10 @@ class _WardenStudentState extends State<WardenStudent> {
 
   void initState() {
     super.initState();
-    dropdownvalue = 'UG';
-    year = 'First';
+    dropdownvalue = widget.selectedDegree;
+    year = widget.selectedYear;
     DisplayStudent();
+    fetchData();
   }
 
   void onQueryChanged(String query) {
@@ -209,6 +216,7 @@ class _WardenStudentState extends State<WardenStudent> {
                           final name = student['Name'].toString().toLowerCase();
                           final roomNo =
                               student['RoomNo'].toString().toLowerCase();
+
                           // Add other fields you want to search
 
                           final allFields =
@@ -216,10 +224,17 @@ class _WardenStudentState extends State<WardenStudent> {
 
                           return allFields.contains(query.toLowerCase());
                         }).toList();
+
                         return ListView.builder(
                           shrinkWrap: true,
                           itemCount: filteredStudents.length,
                           itemBuilder: (context, index) {
+                            if (filteredStudents.isEmpty) {
+                              return Center(child: Text('No students found.'));
+                            }
+                            if (index >= filteredStudents.length) {
+                              return SizedBox(); // Return an empty widget if index is out of bounds
+                            }
                             final student = filteredStudents[index];
                             return ListTile(
                               title: Column(

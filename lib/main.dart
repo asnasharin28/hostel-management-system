@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WardenStudent(),
+      home: WardenPage2(),
+      theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }
 }

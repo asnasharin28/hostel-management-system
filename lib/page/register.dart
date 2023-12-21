@@ -82,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(
-                  40), // Set the border radius for the bottom left corner
+                  40), 
             ),
           ),
           title: Text(

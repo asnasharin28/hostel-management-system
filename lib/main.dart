@@ -26,7 +26,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WardenPage2(),
+      home: WardenStudent(
+        selectedDegree: 'UG',
+        selectedYear: "First",
+      ),
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }

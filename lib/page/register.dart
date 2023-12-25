@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -81,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(
-                  40), // Set the border radius for the bottom left corner
+                  40), 
             ),
           ),
           title: Text(
@@ -104,6 +105,9 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -162,6 +166,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -220,6 +227,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.phone, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -243,6 +256,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -266,6 +282,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -289,6 +308,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.number, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -312,6 +337,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -335,6 +363,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.phone, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
@@ -373,17 +407,43 @@ class _RegisterPageState extends State<RegisterPage> {
                         _AdmissionNo.text.trim(),
                         _BloodGroup.text.trim(),
                         _ParentName.text.trim(),
-                        _PhoneNo.text.trim(),
+                        _GPhoneNo.text.trim(),
                         _RoomNo.text.trim(),
                         _Year.text.trim(),
                         _GraduationController.text.trim(),
                       );
                     }
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WardenStudent()),
-                    );
+                    String selectedGraduation =
+                        _GraduationController.text.trim();
+                    if (selectedGraduation == 'UG') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WardenStudent(
+                                  selectedDegree: 'UG',
+                                  selectedYear: _Year.text.trim(),
+                                )),
+                      );
+                    } else if (selectedGraduation == 'PG') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WardenStudent(
+                                  selectedDegree: 'PG',
+                                  selectedYear: _Year.text.trim(),
+                                )),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WardenStudent(
+                                  selectedDegree: 'B.ED',
+                                  selectedYear: _Year.text.trim(),
+                                )),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,

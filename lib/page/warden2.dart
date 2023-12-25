@@ -1,10 +1,10 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_flutter_app/page/register.dart';
-import 'package:my_flutter_app/page/wardenstudent.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 class WardenPage2 extends StatefulWidget {
   @override
@@ -28,6 +28,8 @@ Future<String> attendance() async {
 }
 
 class _WardenPage2State extends State<WardenPage2> {
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

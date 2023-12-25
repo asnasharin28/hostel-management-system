@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,78 +10,213 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //controller
+  final _emailController = TextEditingController();
+  final _PasswordController = TextEditingController();
+  String selectedUserType = '';
+  bool isLoginSectionVisible = false;
+
+  Future LOGIN() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _PasswordController.text.trim(),
+    );
+  }
+
+  String getHeaderText() {
+    switch (selectedUserType) {
+      case 'warden':
+        return 'Hello warden, please fill out this to get started!';
+      case 'parent':
+        return 'Hello parent, please fill out this to get started!';
+      case 'staff':
+        return 'Hello staff, please fill out this to get started!';
+      case 'student':
+        return 'Hello student, please fill out this to get started!';
+      default:
+        return 'Hello, please select your Account type!';
+    }
+  }
+
+  // Function to handle the container click
+  void _handleContainerClick(String userType) {
+    setState(() {
+      selectedUserType = userType;
+      isLoginSectionVisible = true;
+    });
+  }
+
+  Widget _buildLoginSection() {
+    return Expanded(
+      child: Column(
+        children: [
+          const SizedBox(height: 30),
+          //userid
+          TextField(
+            controller: _emailController,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: Color(0xFFCE5A67),
+                  width: 3,
+                ),
+              ),
+              labelText: "Email",
+              labelStyle: const TextStyle(
+                color: Color(0xFFCE5A67),
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          //password
+          TextField(
+            controller: _PasswordController,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: const BorderSide(
+                  color: Color(0xFFCE5A67),
+                  width: 3,
+                ),
+              ),
+              labelText: "Password",
+              labelStyle: const TextStyle(
+                color: Color(0xFFCE5A67),
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start, // Align to the left
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Handle 'Forgot Password' click
+                  print("Forgot Password clicked!");
+                },
+                child: const Text(
+                  'Forgot Password  >',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          //LOGIN
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(30, 7, 30, 7),
+              decoration: BoxDecoration(
+                color: Color(0xFFCE5A67),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  LOGIN();
+                },
+                child: Text(
+                  'LOGIN',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _PasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          
-          backgroundColor: const Color(0xFFFCF5ED),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 33,
+        backgroundColor: const Color(0xFFFCF5ED),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 33,
+              ),
+              const Text(
+                'Choose account type',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                const Text(
-                  'Choose account type',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Add your logic for when the container is clicked
-                        print('Container clicked!');
-                        // You can replace the print statement with your desired functionality.
-                      },
-                      child: Container(
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFCE5A67),
-                          borderRadius: BorderRadius.circular(15.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _handleContainerClick('warden');
+                      isLoginSectionVisible = true; // Update user type here
+                    },
+                    child: Container(
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFCE5A67),
+                        borderRadius: BorderRadius.circular(15.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 80.0,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              'WARDEN',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
-                        child: const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.person,
-                                size: 80.0,
-                                color: Colors.black,
-                              ),
-                              Text(
-                                'WARDEN',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
                     ),
-    
-    ////////////////////////////
-                    Container(
+                  ),
+
+                  ////////////////////////////
+                  GestureDetector(
+                    onTap: () {
+                      _handleContainerClick('student'); // Update user type here
+                      isLoginSectionVisible = true;
+                    },
+                    child: Container(
                       height: 120,
                       width: 120,
                       decoration: BoxDecoration(
@@ -106,21 +243,30 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               'STUDENT',
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
+                  ),
+                  ////////////////////////////////////////////////////////////////
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ///////////////////////////////////
+                  GestureDetector(
+                    onTap: () {
+                      _handleContainerClick('parent');
+                      isLoginSectionVisible = true; // Update user type here
+                    },
+                    child: Container(
                       height: 120,
                       width: 120,
                       decoration: BoxDecoration(
@@ -147,15 +293,23 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               'PARENT',
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    Container(
+                  ),
+                  ////////////////////////////////
+                  GestureDetector(
+                    onTap: () {
+                      _handleContainerClick('staff'); // Update user type here
+                      isLoginSectionVisible = true;
+                    },
+                    child: Container(
                       height: 120,
                       width: 120,
                       decoration: BoxDecoration(
@@ -182,105 +336,36 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               'STAFF',
                               style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 50),
-                const Text(
-                  'Hello warden,please fill out this to get started!',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.black,
                   ),
+                  /////////////////////////////////////////
+                ],
+              ),
+
+             
+
+              const SizedBox(height: 50),
+              Text(
+                getHeaderText(),
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.black,
                 ),
-                const SizedBox(height: 30),
-                TextField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFCE5A67),
-                        width: 3,
-                      ),
-                    ),
-                    labelText: "User ID",
-                    labelStyle: const TextStyle(
-                      color: Color(0xFFCE5A67),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                TextField(
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: const BorderSide(
-                        color: Color(0xFFCE5A67),
-                        width: 3,
-                      ),
-                    ),
-                    labelText: "Password",
-                    labelStyle: const TextStyle(
-                      color: Color(0xFFCE5A67),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start, // Align to the left
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Handle 'Forgot Password' click
-                        print("Forgot Password clicked!");
-                      },
-                      child: const Text(
-                        'Forgot Password  >',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your logic for button press here
-                    // For example, you can validate the form fields and submit the registration data
-                    // Replace the print statement with your actual logic.
-                    print("Registration button pressed");
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFFCE5A67), // Set the button color
-                    onPrimary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      // Set the border radius for the button
-                    ),
-                    elevation: 18,
-                    fixedSize: const Size(200, 50), // Set the elevation for the button
-                  ),
-                  child: const Text(
-                    "LOGIN",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black, // Set the text color
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 30),
+              if (isLoginSectionVisible) _buildLoginSection(),
+            ],
           ),
         ),
+      ),
     );
   }
 }

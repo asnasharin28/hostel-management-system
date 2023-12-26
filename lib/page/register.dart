@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:my_flutter_app/page/wardenstudent.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -23,21 +25,26 @@ class _RegisterPageState extends State<RegisterPage> {
   final _Year = TextEditingController();
   final _emailController = TextEditingController();
   final _PasswordController = TextEditingController();
+  final _GraduationController = TextEditingController();
+
+  String? _selectedGraduation;
+  String? _selectedYear;
+
+  final _formKey = GlobalKey<FormState>();
 
   Future Register(
-      String Name,
-      String Department,
-      String PhoneNo,
-      String AdmissionNo,
-      String BloodGroup,
-      String ParentName,
-      String GPhoneNo,
-      String RoomNo,
-      String Year) async {
-    await FirebaseFirestore.instance
-        .collection('students')
-        .doc('stddetails')
-        .set({
+    String Name,
+    String Department,
+    String PhoneNo,
+    String AdmissionNo,
+    String BloodGroup,
+    String ParentName,
+    String GPhoneNo,
+    String RoomNo,
+    String Year,
+    String Graduation,
+  ) async {
+    await FirebaseFirestore.instance.collection('students').add({
       'Name': Name,
       'Department': Department,
       'PhoneNO': PhoneNo,
@@ -47,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
       'GPhoneNo': GPhoneNo,
       'RoomNo': RoomNo,
       'Year': Year,
+      'Graduation': Graduation,
     });
   }
 
@@ -60,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _PhoneNo.dispose();
     _RoomNo.dispose();
     _Year.dispose();
+    _GraduationController.dispose();
     super.dispose();
   }
 
@@ -73,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(
-                  40), // Set the border radius for the bottom left corner
+                  40), 
             ),
           ),
           title: Text(
@@ -90,180 +99,307 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextField(
-                controller: _Name,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _Name,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Name\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _Department,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: _selectedGraduation,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "UG/PG/B-ED\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Department",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
+                  items: ['UG', 'PG', 'B.ED'].map((String graduation) {
+                    return DropdownMenuItem<String>(
+                      value: graduation,
+                      child: Text(graduation),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedGraduation = newValue;
+                      _GraduationController.text = newValue!;
+                    });
+                  },
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _Year,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _Department,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Department\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Year",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _PhoneNo,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                DropdownButtonFormField(
+                  value: _selectedYear,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Year\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Phone No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
+                  items: ['First', 'Second', 'Third'].map((String yearr) {
+                    return DropdownMenuItem<String>(
+                      value: yearr,
+                      child: Text(yearr),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedYear = newValue;
+                      _Year.text = newValue!;
+                    });
+                  },
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _AdmissionNo,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.phone, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _PhoneNo,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Phone No\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Admission No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _BloodGroup,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _AdmissionNo,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Admission No\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Blood Group",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _RoomNo,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _BloodGroup,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Blood Group\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Room No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _ParentName,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.number, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _RoomNo,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Room No\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Parent Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _GPhoneNo,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _ParentName,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Parent Name\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Phone No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType:
+                      TextInputType.phone, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  controller: _GPhoneNo,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Phone No\*",
+                    labelStyle: TextStyle(
+                      color: Color(0xFFCE5A67),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add your logic for button press here
-                  // For example, you can validate the form fields and submit the registration data
-                  // Replace the print statement with your actual logic.
-                  print("Registration button pressed");
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFFCE5A67),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    // Set the border radius for the button
+                SizedBox(height: 20),
+                ElevatedButton(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                      color: Colors.black, // Set the text color
+                    ),
                   ),
-                  elevation: 18, // Set the elevation for the button
-                ),
-                child: TextButton(
-                    onPressed: () {
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
                       Register(
                         _Name.text.trim(),
                         _Department.text.trim(),
@@ -271,19 +407,56 @@ class _RegisterPageState extends State<RegisterPage> {
                         _AdmissionNo.text.trim(),
                         _BloodGroup.text.trim(),
                         _ParentName.text.trim(),
-                        _PhoneNo.text.trim(),
+                        _GPhoneNo.text.trim(),
                         _RoomNo.text.trim(),
                         _Year.text.trim(),
+                        _GraduationController.text.trim(),
                       );
-                    },
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                        color: Colors.black, // Set the text color
-                      ),
-                    )),
-              ),
-            ],
+                    }
+
+                    String selectedGraduation =
+                        _GraduationController.text.trim();
+                    if (selectedGraduation == 'UG') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WardenStudent(
+                                  selectedDegree: 'UG',
+                                  selectedYear: _Year.text.trim(),
+                                )),
+                      );
+                    } else if (selectedGraduation == 'PG') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WardenStudent(
+                                  selectedDegree: 'PG',
+                                  selectedYear: _Year.text.trim(),
+                                )),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WardenStudent(
+                                  selectedDegree: 'B.ED',
+                                  selectedYear: _Year.text.trim(),
+                                )),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color(0xFFCE5A67),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      // Set the border radius for the button
+                    ),
+                    elevation: 18, // Set the elevation for the button
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

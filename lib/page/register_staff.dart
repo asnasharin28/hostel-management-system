@@ -1,42 +1,51 @@
+// ignore_for_file: unused_import
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+
 class register_staff extends StatefulWidget {
-  const register_staff({super.key});
+  final String? registeredName;
+  final String? registeredPhoneNo;
+
+  const register_staff({
+    Key? key,
+    this.registeredName,
+    this.registeredPhoneNo,
+  }) : super(key: key);
 
   @override
   State<register_staff> createState() => _register_staffState();
 }
 
 class _register_staffState extends State<register_staff> {
-  final _Name = TextEditingController();
-  final _PhoneNo = TextEditingController();
-  
+  final _formKey = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  final _phoneNo = TextEditingController();
 
-  final _emailController = TextEditingController();
-  final _PasswordController = TextEditingController();
+  Future<String> register(String name, String phoneNo) async {
+    try {
+      DocumentReference docRef =
+          await FirebaseFirestore.instance.collection('staffdetails').add({
+        'Name': name,
+        'PhoneNO': phoneNo,
+      });
 
-  Future Register(
-    String Name,
-    String PhoneNO,
-   
-  ) async {
-    await FirebaseFirestore.instance
-        .collection('staffdetails')
-        
-        .add({
-      'Name': Name,
-      'PhoneNO': PhoneNO,
-      
-    });
+      // Return the document ID
+      return docRef.id;
+    } catch (e) {
+      print("Error registering staff: $e");
+      // Handle the error as needed
+      throw e; // Rethrow the error to propagate it
+    }
   }
 
+  @override
   void dispose() {
-    _Name.dispose();
-    _PhoneNo.dispose();
-   
+    _name.dispose();
+    _phoneNo.dispose();
 
     super.dispose();
   }
@@ -50,16 +59,16 @@ class _register_staffState extends State<register_staff> {
           backgroundColor: Color(0xFFF4BF96),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(
-                  40), // Set the border radius for the bottom left corner
+              bottom: Radius.circular(40),
             ),
           ),
           title: Text(
             'Register',
             style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black),
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
           centerTitle: true,
           elevation: 18,
@@ -68,76 +77,93 @@ class _register_staffState extends State<register_staff> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextField(
-                controller: _Name,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFCE5A67),
-                      width: 3,
-                    ),
-                  ),
-                  labelText: "Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _PhoneNo,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Color(0xFFCE5A67),
-                      width: 3,
-                    ),
-                  ),
-                  labelText: "Phone NO",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
-                ),
-              ),
-               
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add your logic for button press here
-                  // For example, you can validate the form fields and submit the registration data
-                  // Replace the print statement with your actual logic.
-                  print("Registration button pressed");
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFFCE5A67),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    // Set the border radius for the button
-                  ),
-                  elevation: 18, // Set the elevation for the button
-                ),
-                child: TextButton(
-                    onPressed: () {
-                      Register(
-                        _Name.text.trim(),
-                        _PhoneNo.text.trim(),
-                       
-                      );
-                    },
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                        color: Colors.black, // Set the text color
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null;
+                  },
+                  controller: _name,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
                       ),
-                    )),
-              ),
-            ],
+                    ),
+                    labelText: "Name*",
+                    labelStyle: TextStyle(
+                      color: Color(0xFFCE5A67),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null;
+                  },
+                  controller: _phoneNo,
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Phone No*",
+                    labelStyle: TextStyle(
+                      color: Color(0xFFCE5A67),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      // Only proceed with registration if form validation passes
+                      try {
+                        // Register the staff and get the document ID
+                        String docId = await register(
+                          _name.text.trim(),
+                          _phoneNo.text.trim(),
+                        );
+
+                        // Navigate to WardenStaff page with registered data
+                       
+                      } catch (e) {
+                        // Handle the error if needed
+                        print("Error in registration: $e");
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color(0xFFCE5A67),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 18,
+                  ),
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

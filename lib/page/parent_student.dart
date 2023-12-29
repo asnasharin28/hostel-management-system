@@ -80,7 +80,7 @@ class _parent_studentState extends State<parent_student> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Name: Your Name',
+                      'Name: Student Name',
                       style: TextStyle(
                         fontSize: 20,
                         color: const Color.fromARGB(255, 15, 14, 14),

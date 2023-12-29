@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_flutter_app/page/register_parent.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+   
   final _Name = TextEditingController();
   final _Department = TextEditingController();
   final _PhoneNo = TextEditingController();
@@ -86,6 +88,19 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       print("Error saving user data to Firestore: $e");
       // Handle Firestore data save errors here
+    }
+  }
+
+  Future SignUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _PasswordController.text.trim(),
+      );
+    } catch (e) {
+      // Handle sign-up errors here
+      print("Error: $e");
+      // You can show an error message to the user if sign-up fails
     }
   }
 

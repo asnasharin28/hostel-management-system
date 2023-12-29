@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/warden2.dart';
 import 'package:my_flutter_app/page/wardenattendance.dart';
 import 'package:my_flutter_app/page/wardenprofile.dart';
+import 'package:my_flutter_app/page/feedetails.dart';
 
 class WardenPage extends StatefulWidget {
   @override
@@ -16,6 +17,15 @@ class _WardenPageState extends State<WardenPage> {
   List<String> items = ['My Profile', 'Log Out'];
   String? dropvalue;
 
+
+  ////////////////////////////////////
+ void _handlefeedetailsContainerClick() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => feedetails()),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +115,7 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
+             
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -177,6 +188,7 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
+             
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),

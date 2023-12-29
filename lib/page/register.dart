@@ -5,10 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
-import 'package:my_flutter_app/page/wardenstudent.dart';
-
 import 'package:my_flutter_app/page/register_parent.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 
@@ -18,13 +15,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  void _handleregister_parentContainerClick() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => register_parent()),
-    );
-  }
-  //////////////////////////////
+   
   final _Name = TextEditingController();
   final _Department = TextEditingController();
   final _PhoneNo = TextEditingController();
@@ -36,21 +27,28 @@ class _RegisterPageState extends State<RegisterPage> {
   final _Year = TextEditingController();
   final _emailController = TextEditingController();
   final _PasswordController = TextEditingController();
+  final _GraduationController = TextEditingController();
+
+  String? _selectedGraduation;
+  String? _selectedYear;
+
+  final _formKey = GlobalKey<FormState>();
 
   Future Register(
-      String Name,
-      String Department,
-      String PhoneNo,
-      String AdmissionNo,
-      String BloodGroup,
-      String ParentName,
-      String GPhoneNo,
-      String RoomNo,
-      String Year) async {
-    await FirebaseFirestore.instance
-        .collection('students')
-        
-        .add({
+    String Name,
+    String Department,
+    String PhoneNo,
+    String AdmissionNo,
+    String BloodGroup,
+    String ParentName,
+    String GPhoneNo,
+    String RoomNo,
+    String Year,
+    String Graduation,
+    String Email,
+    String Password,
+  ) async {
+    await FirebaseFirestore.instance.collection('student').add({
       'Name': Name,
       'Department': Department,
       'PhoneNO': PhoneNo,
@@ -61,8 +59,26 @@ class _RegisterPageState extends State<RegisterPage> {
       'RoomNo': RoomNo,
       'Year': Year,
       'Graduation': Graduation,
-      'Attendance':false,
+      'Attendance': false,
+      'Fee': false,
+      'MessFee': false,
+      'Position': 'Student',
+      'Email': '${PhoneNo}@gmail.com',
+      'Password': '${AdmissionNo}',
     });
+  }
+
+  Future SignUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _PasswordController.text.trim(),
+      );
+    } catch (e) {
+      // Handle sign-up errors here
+      print("Error: $e");
+      // You can show an error message to the user if sign-up fails
+    }
   }
 
   void dispose() {
@@ -75,6 +91,9 @@ class _RegisterPageState extends State<RegisterPage> {
     _PhoneNo.dispose();
     _RoomNo.dispose();
     _Year.dispose();
+    _GraduationController.dispose();
+    _emailController.dispose();
+    _PasswordController.dispose();
     super.dispose();
   }
 
@@ -87,8 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Color(0xFFF4BF96),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(
-                  40), 
+              bottom: Radius.circular(40),
             ),
           ),
           title: Text(
@@ -105,7 +123,6 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-
           child: Form(
             key: _formKey,
             child: Column(
@@ -133,15 +150,44 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Name\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-
+                SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: _selectedGraduation,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "UG/PG/B-ED\*",
+                    labelStyle: TextStyle(
+                      color: Color(0xFFCE5A67),
+                    ),
+                  ),
+                  items: ['UG', 'PG', 'B.ED'].map((String graduation) {
+                    return DropdownMenuItem<String>(
+                      value: graduation,
+                      child: Text(graduation),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedGraduation = newValue;
+                      _GraduationController.text = newValue!;
+                    });
+                  },
+                ),
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -165,32 +211,44 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Department\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Department",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _Year,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
+                SizedBox(height: 20),
+                DropdownButtonFormField(
+                  value: _selectedYear,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This Field is required';
+                    }
+                    return null; // Return null if the validation passes
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Color(0xFFCE5A67),
+                        width: 3,
+                      ),
+                    ),
+                    labelText: "Year\*",
+                    labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Year",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
+                  items: ['First', 'Second', 'Third'].map((String yearr) {
+                    return DropdownMenuItem<String>(
+                      value: yearr,
+                      child: Text(yearr),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedYear = newValue;
+                      _Year.text = newValue!;
+                    });
+                  },
                 ),
-
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -216,17 +274,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     labelText: "Phone No\*",
                     labelStyle: TextStyle(
-
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Phone No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -250,15 +301,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Admission No\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Admission No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -282,15 +327,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Blood Group\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Blood Group",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -317,15 +356,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Room No\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Room No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -349,15 +382,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Parent Name\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Parent Name",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-
                 SizedBox(height: 20),
                 TextFormField(
                   keyboardType:
@@ -384,47 +411,38 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Phone No\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
-                      width: 3,
                     ),
                   ),
-                  labelText: "Phone No",
-                  labelStyle: TextStyle(
-                    color: Color(0xFFCE5A67),
-                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add your logic for button press here
-                  // For example, you can validate the form fields and submit the registration data
-                  // Replace the print statement with your actual logic.
-                  print("Registration button pressed");
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFFCE5A67),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    // Set the border radius for the button
+                SizedBox(height: 20),
+                ElevatedButton(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                      color: Colors.black, // Set the text color
+                    ),
                   ),
-                  elevation: 18, // Set the elevation for the button
-                ),
-                child: TextButton(
-                    onPressed: () {
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
                       Register(
-                        _Name.text.trim(),
-                        _Department.text.trim(),
-                        _PhoneNo.text.trim(),
-                        _AdmissionNo.text.trim(),
-                        _BloodGroup.text.trim(),
-                        _ParentName.text.trim(),
-                        _GPhoneNo.text.trim(),
-                        _RoomNo.text.trim(),
-                        _Year.text.trim(),
-                      );
-
+                          _Name.text.trim(),
+                          _Department.text.trim(),
+                          _PhoneNo.text.trim(),
+                          _AdmissionNo.text.trim(),
+                          _BloodGroup.text.trim(),
+                          _ParentName.text.trim(),
+                          _GPhoneNo.text.trim(),
+                          _RoomNo.text.trim(),
+                          _Year.text.trim(),
+                          _GraduationController.text.trim(),
+                          _emailController.text.trim(),
+                          _PasswordController.text.trim());
                     }
+                
+                    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => register_parent()),
+    );
 
                     String selectedGraduation =
                         _GraduationController.text.trim();

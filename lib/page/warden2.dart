@@ -1,9 +1,12 @@
-import 'dart:ffi';
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_flutter_app/page/register.dart';
+import 'package:my_flutter_app/page/wardenstudent.dart';
 
 
 class WardenPage2 extends StatefulWidget {

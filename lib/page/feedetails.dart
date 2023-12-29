@@ -181,7 +181,7 @@ class _feedetailsState extends State<feedetails> {
                 visible: isSelected[0],
                 child: Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('students').where('Fees',isEqualTo: true).snapshots(),
+                    stream: FirebaseFirestore.instance.collection('student').where('Fee',isEqualTo: true).snapshots(),
                     builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                       if(snapshot.connectionState==ConnectionState.waiting){
@@ -344,7 +344,7 @@ class _feedetailsState extends State<feedetails> {
                 visible: isSelected[1],
                 child: Expanded(
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('students').where('Fees',isEqualTo: false).snapshots(),
+                    stream: FirebaseFirestore.instance.collection('student').where('Fee',isEqualTo: false).snapshots(),
                     builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                       if(snapshot.connectionState==ConnectionState.waiting){

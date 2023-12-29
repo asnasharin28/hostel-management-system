@@ -8,6 +8,7 @@ import 'package:my_flutter_app/page/wardenprofile.dart';
 class WardenPage extends StatefulWidget {
   @override
   _WardenPageState createState() => _WardenPageState();
+  final user = FirebaseAuth.instance.currentUser;
 }
 
 class _WardenPageState extends State<WardenPage> {

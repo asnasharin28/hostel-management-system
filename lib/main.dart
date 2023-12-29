@@ -7,6 +7,12 @@ import 'package:my_flutter_app/page/Loginpage.dart';
 import 'package:my_flutter_app/page/register_staff.dart';
 import 'package:my_flutter_app/page/register_staff.dart';
 import 'package:my_flutter_app/page/warden.dart';
+
+import 'package:my_flutter_app/page/warden2.dart';
+import 'package:my_flutter_app/page/warden3.dart';
+import 'package:my_flutter_app/page/wardenattendance.dart';
+import 'package:my_flutter_app/page/wardenstudent.dart';
+
 import 'page/staff3.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -26,7 +32,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       home:parent(),
+
     );
   }
 }

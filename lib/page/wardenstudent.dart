@@ -4,9 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_flutter_app/page/register.dart';
+import 'package:my_flutter_app/page/warden2.dart';
 
 class WardenStudent extends StatefulWidget {
-  const WardenStudent({super.key});
+  final String selectedDegree;
+  final String selectedYear;
+
+  const WardenStudent(
+      {Key? key, required this.selectedDegree, required this.selectedYear})
+      : super(key: key);
 
   @override
   State<WardenStudent> createState() => _WardenStudentState();
@@ -30,9 +36,10 @@ class _WardenStudentState extends State<WardenStudent> {
 
   void initState() {
     super.initState();
-    dropdownvalue = 'UG';
-    year = 'First';
+    dropdownvalue = widget.selectedDegree;
+    year = widget.selectedYear;
     DisplayStudent();
+    fetchData();
   }
 
   void onQueryChanged(String query) {
@@ -96,9 +103,11 @@ class _WardenStudentState extends State<WardenStudent> {
             ),
             Spacer(),
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Students',
                   style: TextStyle(
@@ -107,10 +116,9 @@ class _WardenStudentState extends State<WardenStudent> {
                 ),
                 Row(children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 1, 0, 0),
                     width: 50,
+                    height: 25,
                     child: DropdownButton<String>(
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       value: dropdownvalue,
                       icon: const Icon(Icons.arrow_drop_down),
                       isExpanded: true,
@@ -125,13 +133,14 @@ class _WardenStudentState extends State<WardenStudent> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          dropdownvalue = newValue!;
+                          dropdownvalue = newValue;
                         });
                       },
                     ),
                   ),
                   Container(
                     width: 80,
+                    height: 25,
                     child: DropdownButton<String>(
                       padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                       value: year,
@@ -148,7 +157,7 @@ class _WardenStudentState extends State<WardenStudent> {
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          year = newValue!;
+                          year = newValue;
                         });
                       },
                     ),
@@ -209,17 +218,22 @@ class _WardenStudentState extends State<WardenStudent> {
                           final name = student['Name'].toString().toLowerCase();
                           final roomNo =
                               student['RoomNo'].toString().toLowerCase();
-                          // Add other fields you want to search
 
-                          final allFields =
-                              '$name $roomNo'; // Concatenate all fields to search
+                          final allFields = '$name $roomNo';
 
                           return allFields.contains(query.toLowerCase());
                         }).toList();
+
                         return ListView.builder(
                           shrinkWrap: true,
                           itemCount: filteredStudents.length,
                           itemBuilder: (context, index) {
+                            if (filteredStudents.isEmpty) {
+                              return Center(child: Text('No students found.'));
+                            }
+                            if (index >= filteredStudents.length) {
+                              return SizedBox(); // Return an empty widget if index is out of bounds
+                            }
                             final student = filteredStudents[index];
                             return ListTile(
                               title: Column(
@@ -239,31 +253,220 @@ class _WardenStudentState extends State<WardenStudent> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                'Name: ${student['Name']}' +
-                                                    '\nRoom No: ${student['RoomNo']}' +
-                                                    '\nPhone No: ${student['PhoneNO']}',
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  height: 1.3,
-                                                  color: const Color.fromARGB(
-                                                      255, 15, 14, 14),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 100,
+                                                    child: Text(
+                                                      'Name',
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        height: 1.3,
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            255, 15, 14, 14),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ': ${student['Name']}',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      height: 1.3,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 15, 14, 14),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 100,
+                                                    child: Text(
+                                                      'Room No',
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        height: 1.3,
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            255, 15, 14, 14),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ': ${student['RoomNo']}',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      height: 1.3,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 15, 14, 14),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 100,
+                                                    child: Text(
+                                                      'Phone No',
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        height: 1.3,
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            255, 15, 14, 14),
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ': ${student['PhoneNO']}',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      height: 1.3,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 15, 14, 14),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                               Visibility(
                                                 visible: isVisibleList[index],
-                                                child: Text(
-                                                  'Blood Group: ${student['BloodGroup']}' +
-                                                      '\nParent Name: ${student['ParentName']}' +
-                                                      '\nPhone No: ${student['GPhoneNo']}',
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    height: 1.3,
-                                                    color: Color.fromARGB(
-                                                        255, 15, 14, 14),
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          child: Text(
+                                                            'Blood Group',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              height: 1.3,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      15,
+                                                                      14,
+                                                                      14),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          ': ${student['BloodGroup']}',
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            height: 1.3,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    15,
+                                                                    14,
+                                                                    14),
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          child: Text(
+                                                            'Parent Name',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              height: 1.3,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      15,
+                                                                      14,
+                                                                      14),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                            ':${student['ParentName']}',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              height: 1.3,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      15,
+                                                                      14,
+                                                                      14),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ))
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          child: Text(
+                                                            'Phone No',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              height: 1.3,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      15,
+                                                                      14,
+                                                                      14),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                            ': ${student['GPhoneNo']}',
+                                                            style: TextStyle(
+                                                              fontSize: 15,
+                                                              height: 1.3,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      15,
+                                                                      14,
+                                                                      14),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ))
+                                                      ],
+                                                    )
+                                                  ],
                                                 ),
                                               ),
                                             ],

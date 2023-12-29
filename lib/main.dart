@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/Login_page.dart';
 import 'package:my_flutter_app/page/feedetails.dart';
@@ -21,7 +23,8 @@ import 'package:my_flutter_app/page/register_parent.dart';
 
 
 
-Future<void> main() async {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -33,9 +36,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      home:RegisterPage(),
-
+      home: RegisterPage(),
+      theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:my_flutter_app/page/warden.dart';
 import 'package:my_flutter_app/page/warden2.dart';
 import 'package:my_flutter_app/page/warden3.dart';
 import 'package:my_flutter_app/page/wardenattendance.dart';
+import 'package:my_flutter_app/page/wardenprofile.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 import 'page/staff3.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WardenAttendance(),
+      home: WardenStudent(selectedDegree: 'UG', selectedYear: 'First'),
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }

@@ -44,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
     String Year,
     String Graduation,
   ) async {
-    await FirebaseFirestore.instance.collection('students').add({
+    await FirebaseFirestore.instance.collection('student').add({
       'Name': Name,
       'Department': Department,
       'PhoneNO': PhoneNo,
@@ -55,6 +55,12 @@ class _RegisterPageState extends State<RegisterPage> {
       'RoomNo': RoomNo,
       'Year': Year,
       'Graduation': Graduation,
+      'Attendance': false,
+      'Fee': false,
+      'MessFee': false,
+      'Position': 'Student',
+      'Email': '${PhoneNo}@gmail.com',
+      'Password': '${AdmissionNo}',
     });
   }
 
@@ -81,8 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Color(0xFFF4BF96),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(
-                  40), 
+              bottom: Radius.circular(40),
             ),
           ),
           title: Text(

@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -247,9 +247,10 @@ class _WardenPage2State extends State<WardenPage2> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              WardenStudent(selectedDegree: 'B.ED',
-                              selectedYear: 'First',)),
+                          builder: (context) => WardenStudent(
+                                selectedDegree: 'B.ED',
+                                selectedYear: 'First',
+                              )),
                     );
                   },
                 ),

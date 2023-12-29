@@ -1,6 +1,9 @@
+// ignore_for_file: unused_import
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/page/feedetails.dart';
 import 'package:my_flutter_app/page/staff1.dart';
 import 'staff1.dart';
 import 'package:my_flutter_app/page/register_staff.dart';
@@ -13,12 +16,14 @@ class WardenPage extends StatefulWidget {
 
 class _WardenPageState extends State<WardenPage> {
 
-  void _handleregister_staffContainerClick() {
+  ////////////////////////////////////
+ void _handlefeedetailsContainerClick() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => register_staff()),
+      MaterialPageRoute(builder: (context) => feedetails()),
     );
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +90,7 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: _handleregister_staffContainerClick,
+             
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -105,20 +110,23 @@ class _WardenPageState extends State<WardenPage> {
               ),
             ),
             SizedBox(height: 30.0),
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              //height:100,
-              width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFFCE5A67),
-              ),
-              child: Text(
-                'Fee Details',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 15, 14, 14),
+            GestureDetector(
+               onTap: _handlefeedetailsContainerClick,
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Fee Details',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
                 ),
               ),
             ),
@@ -142,7 +150,7 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: _handleregister_staffContainerClick,
+             
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),

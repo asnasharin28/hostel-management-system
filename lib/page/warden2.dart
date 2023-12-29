@@ -1,9 +1,12 @@
-import 'dart:ffi';
+// ignore_for_file: unused_import
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_flutter_app/page/register.dart';
+import 'package:my_flutter_app/page/wardenstudent.dart';
 
 
 class WardenPage2 extends StatefulWidget {
@@ -249,9 +252,10 @@ class _WardenPage2State extends State<WardenPage2> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              WardenStudent(selectedDegree: 'B.ED',
-                              selectedYear: 'First',)),
+                          builder: (context) => WardenStudent(
+                                selectedDegree: 'B.ED',
+                                selectedYear: 'First',
+                              )),
                     );
                   },
                 ),

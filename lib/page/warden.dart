@@ -1,9 +1,10 @@
+// ignore_for_file: unused_label
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/page/staff1.dart';
-import 'staff1.dart';
-import 'package:my_flutter_app/page/register_staff.dart';
+import 'package:my_flutter_app/page/warden2.dart';
+import 'package:my_flutter_app/page/wardenattendance.dart';
+import 'package:my_flutter_app/page/wardenprofile.dart';
 
 class WardenPage extends StatefulWidget {
   @override
@@ -12,13 +13,9 @@ class WardenPage extends StatefulWidget {
 }
 
 class _WardenPageState extends State<WardenPage> {
+  List<String> items = ['My Profile', 'Log Out'];
+  String? dropvalue;
 
-  void _handleregister_staffContainerClick() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => register_staff()),
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +34,27 @@ class _WardenPageState extends State<WardenPage> {
           ),
           iconSize: 50,
           onPressed: () {
-            // Add your onPressed logic here
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                  0, 100, 100, 0), // Adjust position as needed
+              items: items.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ).then((value) {
+              setState(() {
+                dropvalue = value;
+                if (value == 'My Profile') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WardenProfile()),
+                  );
+                }
+              });
+            });
           },
         ),
         title: Text(
@@ -56,7 +73,6 @@ class _WardenPageState extends State<WardenPage> {
               height: 70,
             ),
             GestureDetector(
-               
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -82,10 +98,13 @@ class _WardenPageState extends State<WardenPage> {
                   ),
                 ),
               ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => WardenPage2()));
+              },
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: _handleregister_staffContainerClick,
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -103,46 +122,61 @@ class _WardenPageState extends State<WardenPage> {
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 30.0),
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              //height:100,
-              width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFFCE5A67),
-              ),
-              child: Text(
-                'Fee Details',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 15, 14, 14),
-                ),
-              ),
-            ),
-            SizedBox(height: 30.0),
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              //height:100,
-              width: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFFCE5A67),
-              ),
-              child: Text(
-                'Mess Details',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 15, 14, 14),
-                ),
-              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WardenAttendance()));
+              },
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: _handleregister_staffContainerClick,
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Fee Details',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
+                ),
+              ),
+              onTap: () {
+                //Go to feedetails page
+              },
+            ),
+            SizedBox(height: 30.0),
+            GestureDetector(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Mess Details',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
+                ),
+              ),
+              onTap: () {
+                //Go to mess details in fee details
+              },
+            ),
+            SizedBox(height: 30.0),
+            GestureDetector(
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -160,26 +194,35 @@ class _WardenPageState extends State<WardenPage> {
                   ),
                 ),
               ),
+              onTap: () {
+                //go to warden staff
+              },
             ),
             SizedBox(height: 30.0),
-            ElevatedButton(
-              
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFFCE5A67),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            GestureDetector(
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
                 ),
-                 padding: EdgeInsets.fromLTRB(30, 7, 30, 7),
+                child: Text(
+                  'My Profile',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
+                ),
               ),
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WardenProfile()),
+                );
               },
-              child: Text('LOGOUT',
-              style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        )),
             ),
           ],
         ),

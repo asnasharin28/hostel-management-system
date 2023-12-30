@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, duplicate_import
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -164,7 +166,7 @@ class _WardenPageState extends State<WardenPage> {
             ElevatedButton(
               
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFFCE5A67),
+                backgroundColor: Color(0xFFCE5A67),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

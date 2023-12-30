@@ -3,8 +3,13 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_flutter_app/page/register.dart';
+
 
 class Wardenstaff extends StatefulWidget {
   @override
@@ -14,13 +19,14 @@ class Wardenstaff extends StatefulWidget {
 class _Wardenstaff extends State<Wardenstaff> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _phonenoController = TextEditingController();
-  TextEditingController _attendanceController = TextEditingController();
+
 
   final CollectionReference staffdetails=FirebaseFirestore.instance.collection('Staffdetails');
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         inputDecorationTheme: InputDecorationTheme(
           focusedBorder: UnderlineInputBorder(
@@ -94,15 +100,21 @@ class _Wardenstaff extends State<Wardenstaff> {
           ],
         ),
 
-        //floating action button
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _showInsertionDialog();
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Color.fromRGBO(244, 191, 150, 1),
-          foregroundColor: Colors.black,
-        ),
+      //floating action button
+floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    // Navigate to RegisterPage on FAB click
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => RegisterPage()),
+    );
+  }, // <-- Add the missing closing parenthesis here
+  child: Icon(Icons.add),
+  backgroundColor: Color.fromRGBO(244, 191, 150, 1),
+  foregroundColor: Colors.black,
+),
+
+
         body:  StreamBuilder(
   stream: staffdetails.snapshots(),
   builder: (context, AsyncSnapshot snapshot) {
@@ -137,7 +149,7 @@ class _Wardenstaff extends State<Wardenstaff> {
                   Text(staffdetailssnap ['Name'],style: TextStyle(fontSize: 18,fontWeight:FontWeight.bold),),
                   
                    Text(staffdetailssnap ['Phone no'].toString(),style: TextStyle(fontSize: 18),),
-                   Text(staffdetailssnap ['Attendance'],style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                 
                 ],
                 ),
                Row(
@@ -178,92 +190,7 @@ class _Wardenstaff extends State<Wardenstaff> {
   }
 
 //showinsertion dialog fn declare
-  void _showInsertionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter details'),
-          content: Container(
-            height: 200.0, // Set the height
-            width: 300.0, // Set the width
-            child: Column(
-              children: [
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name ',
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black, // Set the border color when focused
-                      ),
-                    ),
-                  ),
-                ),
-               TextField(
-  controller: _phonenoController,
-  keyboardType: TextInputType.number,
-  maxLength: 10,
-  decoration: InputDecoration(
-    labelText: 'Phone no ',
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: Color.fromARGB(0, 0, 0, 0), // Set the border color when focused
-      ),
-    ),
-  ),
-  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-  // Allow only numeric input
-),
-                TextField(
-                  controller: _attendanceController,
-                  decoration: InputDecoration(
-                    labelText: 'Attendance',
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black, // Set the border color when focused
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // Add your save logic here
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color.fromRGBO(244, 191, 150, 1)),
-                foregroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 0, 0, 0)),
-              ),
-              child: Text('Save'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Add your cancel logic here
-                   
-              _nameController.clear();
-              _phonenoController.clear();
-              _attendanceController.clear();
-             
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color.fromRGBO(244, 191, 150, 1)),
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-              ),
-              child: Text('Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  
   //editfunction
   void _showEditDialog(String documentId) {
   showDialog(
@@ -273,7 +200,7 @@ class _Wardenstaff extends State<Wardenstaff> {
         title: Text('Edit details'),
         content: Container(
           height: 200.0, // Set the height
-          width: 300.0, // Set the width
+          width: 300.0, // Set the widthf
           child: Column(
             children: [
               TextField(
@@ -302,17 +229,7 @@ class _Wardenstaff extends State<Wardenstaff> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 // Allow only numeric input
               ),
-              TextField(
-                controller: _attendanceController,
-                decoration: InputDecoration(
-                  labelText: 'Attendance',
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black, // Set the border color when focused
-                    ),
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ),
@@ -323,11 +240,11 @@ class _Wardenstaff extends State<Wardenstaff> {
               staffdetails.doc(documentId).update({
                 'Name': _nameController.text,
                 'Phone no': int.parse(_phonenoController.text),
-                'Attendance': _attendanceController.text,
+               
               });
               _nameController.clear();
               _phonenoController.clear();
-              _attendanceController.clear();
+            
               Navigator.of(context).pop(); // Close the dialog
             },
             style: ButtonStyle(
@@ -342,7 +259,7 @@ class _Wardenstaff extends State<Wardenstaff> {
               // Add your cancel logic here
               _nameController.clear();
               _phonenoController.clear();
-              _attendanceController.clear();
+             
               Navigator.of(context).pop(); // Close the dialog
             },
             style: ButtonStyle(

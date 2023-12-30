@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_flutter_app/page/register_parent.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+   
   final _Name = TextEditingController();
   final _Department = TextEditingController();
   final _PhoneNo = TextEditingController();
@@ -32,7 +34,25 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  Future Register(
+  Future<UserCredential?> registerUserWithEmailAndPassword(
+    String email, // Using phone number as email
+    String password, // Using admission number as password
+  ) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential;
+    } catch (e) {
+      print("Error registering user: $e");
+      return null; // Return null if registration fails
+    }
+  }
+
+  Future<void> saveUserDataToFirestore(
+    UserCredential userCredential,
     String Name,
     String Department,
     String PhoneNo,
@@ -44,18 +64,44 @@ class _RegisterPageState extends State<RegisterPage> {
     String Year,
     String Graduation,
   ) async {
-    await FirebaseFirestore.instance.collection('students').add({
-      'Name': Name,
-      'Department': Department,
-      'PhoneNO': PhoneNo,
-      'AdmissionNO': AdmissionNo,
-      'BloodGroup': BloodGroup,
-      'ParentName': ParentName,
-      'GPhoneNo': GPhoneNo,
-      'RoomNo': RoomNo,
-      'Year': Year,
-      'Graduation': Graduation,
-    });
+    try {
+      String? userID = userCredential.user?.uid;
+      await FirebaseFirestore.instance.collection('student').doc(userID).set({
+        'UserID': userID,
+        'Name': Name,
+        'Department': Department,
+        'PhoneNO': PhoneNo,
+        'AdmissionNO': AdmissionNo,
+        'BloodGroup': BloodGroup,
+        'ParentName': ParentName,
+        'GPhoneNo': GPhoneNo,
+        'RoomNo': RoomNo,
+        'Year': Year,
+        'Graduation': Graduation,
+        'Attendance': false,
+        'Fee': false,
+        'MessFee': false,
+        'Position': 'Student',
+        'Email': PhoneNo, // Store phone number as email
+        'Password': AdmissionNo, // Store admission number as password
+      });
+    } catch (e) {
+      print("Error saving user data to Firestore: $e");
+      // Handle Firestore data save errors here
+    }
+  }
+
+  Future SignUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _PasswordController.text.trim(),
+      );
+    } catch (e) {
+      // Handle sign-up errors here
+      print("Error: $e");
+      // You can show an error message to the user if sign-up fails
+    }
   }
 
   void dispose() {
@@ -81,8 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Color(0xFFF4BF96),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(
-                  40), 
+              bottom: Radius.circular(40),
             ),
           ),
           title: Text(
@@ -398,51 +443,67 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.black, // Set the text color
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Register(
-                        _Name.text.trim(),
-                        _Department.text.trim(),
-                        _PhoneNo.text.trim(),
-                        _AdmissionNo.text.trim(),
-                        _BloodGroup.text.trim(),
-                        _ParentName.text.trim(),
-                        _GPhoneNo.text.trim(),
-                        _RoomNo.text.trim(),
-                        _Year.text.trim(),
-                        _GraduationController.text.trim(),
-                      );
-                    }
+                      String email =
+                          _PhoneNo.text.trim()+'@gmail.com'; // Phone number as email
+                      String password = _AdmissionNo.text
+                          .trim(); // Admission number as password
 
-                    String selectedGraduation =
-                        _GraduationController.text.trim();
-                    if (selectedGraduation == 'UG') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WardenStudent(
-                                  selectedDegree: 'UG',
-                                  selectedYear: _Year.text.trim(),
-                                )),
-                      );
-                    } else if (selectedGraduation == 'PG') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WardenStudent(
-                                  selectedDegree: 'PG',
-                                  selectedYear: _Year.text.trim(),
-                                )),
-                      );
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WardenStudent(
-                                  selectedDegree: 'B.ED',
-                                  selectedYear: _Year.text.trim(),
-                                )),
-                      );
+                      UserCredential? userCredential =
+                          await registerUserWithEmailAndPassword(
+                              email, password);
+
+                      if (userCredential != null) {
+                        await saveUserDataToFirestore(
+                          userCredential,
+                          _Name.text.trim(),
+                          _Department.text.trim(),
+                          _PhoneNo.text.trim(),
+                          _AdmissionNo.text.trim(),
+                          _BloodGroup.text.trim(),
+                          _ParentName.text.trim(),
+                          _GPhoneNo.text.trim(),
+                          _RoomNo.text.trim(),
+                          _Year.text.trim(),
+                          _GraduationController.text.trim(),
+                        );
+
+                        // Navigate to the appropriate page after successful registration
+                        String selectedGraduation =
+                            _GraduationController.text.trim();
+                        if (selectedGraduation == 'UG') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WardenStudent(
+                                selectedDegree: 'UG',
+                                selectedYear: _Year.text.trim(),
+                              ),
+                            ),
+                          );
+                        } else if (selectedGraduation == 'PG') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WardenStudent(
+                                selectedDegree: 'PG',
+                                selectedYear: _Year.text.trim(),
+                              ),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WardenStudent(
+                                selectedDegree: 'B.ED',
+                                selectedYear: _Year.text.trim(),
+                              ),
+                            ),
+                          );
+                        }
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(

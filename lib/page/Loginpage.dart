@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -48,89 +48,91 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildLoginSection() {
     return Expanded(
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
-          //userid
-          TextField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: const BorderSide(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            //userid
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFCE5A67),
+                    width: 3,
+                  ),
+                ),
+                labelText: "Email",
+                labelStyle: const TextStyle(
                   color: Color(0xFFCE5A67),
-                  width: 3,
                 ),
               ),
-              labelText: "Email",
-              labelStyle: const TextStyle(
-                color: Color(0xFFCE5A67),
-              ),
             ),
-          ),
-          const SizedBox(height: 30),
-          //password
-          TextField(
-            controller: _PasswordController,
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-                borderSide: const BorderSide(
+            const SizedBox(height: 30),
+            //password
+            TextField(
+              controller: _PasswordController,
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFCE5A67),
+                    width: 3,
+                  ),
+                ),
+                labelText: "Password",
+                labelStyle: const TextStyle(
                   color: Color(0xFFCE5A67),
-                  width: 3,
                 ),
               ),
-              labelText: "Password",
-              labelStyle: const TextStyle(
-                color: Color(0xFFCE5A67),
-              ),
             ),
-          ),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start, // Align to the left
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Handle 'Forgot Password' click
-                  print("Forgot Password clicked!");
-                },
-                child: const Text(
-                  'Forgot Password  >',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.black,
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start, // Align to the left
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    // Handle 'Forgot Password' click
+                    print("Forgot Password clicked!");
+                  },
+                  child: const Text(
+                    'Forgot Password  >',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            //LOGIN
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(30, 7, 30, 7),
+                decoration: BoxDecoration(
+                  color: Color(0xFFCE5A67),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    LOGIN();
+                  },
+                  child: Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          //LOGIN
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(30, 7, 30, 7),
-              decoration: BoxDecoration(
-                color: Color(0xFFCE5A67),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  LOGIN();
-                },
-                child: Text(
-                  'LOGIN',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

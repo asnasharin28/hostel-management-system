@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/page/wardenprofile.dart';
 
 class WardenAttendance extends StatefulWidget {
   const WardenAttendance({super.key});
@@ -20,6 +21,9 @@ class _WardenAttendanceState extends State<WardenAttendance> {
     });
   }
 
+  List<String> items = ['My Profile', 'Log Out'];
+  String? dropvalue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +42,27 @@ class _WardenAttendanceState extends State<WardenAttendance> {
             ),
             iconSize: 50,
             onPressed: () {
-              // Add your onPressed logic here
+              showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                  0, 100, 100, 0), // Adjust position as needed
+              items: items.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ).then((value) {
+              setState(() {
+                dropvalue = value;
+                if (value == 'My Profile') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WardenProfile()),
+                  );
+                }
+              });
+            });
             },
           ),
           title: Row(children: [
@@ -66,13 +90,16 @@ class _WardenAttendanceState extends State<WardenAttendance> {
             Spacer(),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               Text(
                 'Attendance',
                 style: TextStyle(
                   fontSize: 15,
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Container(
                 height: 20,
@@ -112,6 +139,9 @@ class _WardenAttendanceState extends State<WardenAttendance> {
                   },
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 height: 15,
                 width: MediaQuery.of(context).size.width * 0.20,
@@ -144,7 +174,7 @@ class _WardenAttendanceState extends State<WardenAttendance> {
                 child: Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
-                          .collection('students')
+                          .collection('student')
                           .where('Attendance', isEqualTo: true)
                           .snapshots(),
                       builder: (BuildContext context,
@@ -310,7 +340,7 @@ class _WardenAttendanceState extends State<WardenAttendance> {
                 child: Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
-                          .collection('students')
+                          .collection('student')
                           .where('Attendance', isEqualTo: false)
                           .snapshots(),
                       builder: (BuildContext context,

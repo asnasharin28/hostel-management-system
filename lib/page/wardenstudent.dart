@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_flutter_app/page/register.dart';
 import 'package:my_flutter_app/page/warden2.dart';
+import 'package:my_flutter_app/page/wardenprofile.dart';
 
 class WardenStudent extends StatefulWidget {
   final String selectedDegree;
@@ -30,6 +31,8 @@ class _WardenStudentState extends State<WardenStudent> {
     'B.ED',
   ];
   List<String> YearList = ['First', 'Second', 'Third'];
+  List<String> items = ['My Profile', 'Log Out'];
+  String? dropvalue;
 
   String? dropdownvalue;
   String? year;
@@ -50,7 +53,7 @@ class _WardenStudentState extends State<WardenStudent> {
 
   Future<void> DisplayStudent() async {
     final QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('students').get();
+        await FirebaseFirestore.instance.collection('student').get();
     setState(() {
       studentDocuments = querySnapshot.docs;
       isVisibleList = List.generate(studentDocuments.length, (_) => false);
@@ -75,7 +78,26 @@ class _WardenStudentState extends State<WardenStudent> {
           ),
           iconSize: 50,
           onPressed: () {
-            // Add your onPressed logic here
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(0, 100, 100, 0),
+              items: items.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ).then((value) {
+              setState(() {
+                dropvalue = value;
+                if (value == 'My Profile') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WardenProfile()),
+                  );
+                }
+              });
+            });
           },
         ),
         title: Row(
@@ -199,7 +221,7 @@ class _WardenStudentState extends State<WardenStudent> {
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('students')
+                        .collection('student')
                         .where('Graduation', isEqualTo: dropdownvalue)
                         .where('Year', isEqualTo: year)
                         .snapshots(),
@@ -231,7 +253,7 @@ class _WardenStudentState extends State<WardenStudent> {
                             if (filteredStudents.isEmpty) {
                               return Center(child: Text('No students found.'));
                             }
-                            if (index >= filteredStudents.length) {
+                            if (index >= isVisibleList.length || index < 0) {
                               return SizedBox(); // Return an empty widget if index is out of bounds
                             }
                             final student = filteredStudents[index];
@@ -494,7 +516,6 @@ class _WardenStudentState extends State<WardenStudent> {
                                       )),
                                 ],
                               ),
-                              // Add other widgets for additional details if needed
                             );
                           },
                         );

@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 class Student3Page extends StatefulWidget {
@@ -44,7 +46,7 @@ class _Student3PageState extends State<Student3Page> {
             ),
             Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               //height:100,
              width:200,
               decoration: BoxDecoration(
@@ -70,7 +72,7 @@ class _Student3PageState extends State<Student3Page> {
             SizedBox(height: 30.0),
            Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               //height:100,
              width:200,
               decoration: BoxDecoration(
@@ -88,7 +90,7 @@ class _Student3PageState extends State<Student3Page> {
             SizedBox(height: 30.0),
            Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               //height:100,
              width:200,
               decoration: BoxDecoration(
@@ -96,7 +98,7 @@ class _Student3PageState extends State<Student3Page> {
                 color: Color(0xFFCE5A67),
               ),
               child: Text(
-                'Fee Details',
+                'Attendence',
                 style: TextStyle(
                   fontSize: 20,
                   color: const Color.fromARGB(255, 15, 14, 14),
@@ -113,20 +115,86 @@ class _Student3PageState extends State<Student3Page> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color(0xFFCE5A67),
               ),
+               child: GestureDetector(
+                onTap: () {
+                  _showAlertDialog();
+                },
               child: Text(
-                'Attendece',
+                'Fee details',
                 style: TextStyle(
                   fontSize: 20,
                   color: const Color.fromARGB(255, 15, 14, 14),
                 ),
               ),
             ),
-            SizedBox(height: 30.0),
+           ),
            
-           
-          ],
+          ]
         ),
       ),
     );
   }
+
+ void _showAlertDialog() {
+ 
+
+  showDialog(
+    context:context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Container(
+          width: 180.0, // Set your desired width
+          height: 180.0, // Set your desired height
+          child: Column(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 1
+                  print("Option 1");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(" Rent:"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 2
+                  print("Option 2");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("   Mess:"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 3
+                  print("Option 3");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("   Total:"),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the AlertDialog
+            },
+            child: Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }

@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 
 class Student1Page extends StatefulWidget {
@@ -6,6 +8,7 @@ class Student1Page extends StatefulWidget {
 }
 
 class _Student1PageState extends State<Student1Page> {
+  bool showButtons = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,12 +80,96 @@ class _Student1PageState extends State<Student1Page> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color(0xFFCE5A67),
               ),
-              child: Text(
-                'Mess detsils',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 15, 14, 14),
+              
+              child: GestureDetector(
+                child: Text(
+                  'Mess details',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
                 ),
+                onTap: (){
+                  showDialog(context: context,
+                  builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            
+          return AlertDialog(
+            backgroundColor: Color(0xFFF4BF96),
+                contentPadding: EdgeInsets.zero,
+                content: Container(
+                  
+          width: 180.0,
+          height: showButtons ? 180.0 : 50.0,
+          child: showButtons
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        print("Button 1 clicked");
+                      },
+                      child: Text('Yes',
+                      style: TextStyle(
+                        color: Colors.black,
+ 
+                      )
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        print("Button 2 clicked");
+                      },
+                      child: Text('No',
+                      style: TextStyle(
+                         color: Colors.black,
+
+                      ),
+                      ),
+                    ),
+                    
+                  ],
+                )
+              : ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      showButtons = true;
+                    });
+                  },
+                  
+                  child: Text('poll',
+                  style: TextStyle(
+                    color: Colors.black,
+              
+                  ),
+                  
+                  ),
+                ),
+                ),
+                actions: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            
+            child: Text('Close',
+            style: TextStyle(
+               color: Colors.black,
+
+            ),),
+          ),
+                ],
+              );
+          }
+        );
+                  }
+                  );
+                  
+                },
               ),
             ),
             SizedBox(height: 30.0),
@@ -95,6 +182,66 @@ class _Student1PageState extends State<Student1Page> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color(0xFFCE5A67),
               ),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Container(
+          width: 180.0, // Set your desired width
+          height: 180.0, // Set your desired height
+          child: Column(
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 1
+                  print("Option 1");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(" Rent:"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 2
+                  print("Option 2");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("   Mess:"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Handle Option 3
+                  print("Option 3");
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text("   Total:"),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the AlertDialog
+            },
+            child: Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
+                },
               child: Text(
                 'Fee Details',
                 style: TextStyle(
@@ -102,7 +249,7 @@ class _Student1PageState extends State<Student1Page> {
                   color: const Color.fromARGB(255, 15, 14, 14),
                 ),
               ),
-            ),
+            )),
             SizedBox(height: 30.0),
            Container(
               alignment: Alignment.center,
@@ -127,6 +274,12 @@ class _Student1PageState extends State<Student1Page> {
           ],
         ),
       ),
+      
     );
+    
   }
+  
+
+
 }
+ 

@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/Login_page.dart';
+import 'package:my_flutter_app/page/admin.dart';
 import 'package:my_flutter_app/page/parent.dart';
 import 'package:my_flutter_app/page/parent_myprofile.dart';
 import 'package:my_flutter_app/page/register.dart';
 import 'package:my_flutter_app/page/Loginpage.dart';
+import 'package:my_flutter_app/page/student4.dart';
 import 'package:my_flutter_app/page/warden.dart';
+import 'package:my_flutter_app/page/wardenstudent.dart';
 import 'page/staff3.dart';
 import 'package:my_flutter_app/page/student1.dart';
 import 'package:my_flutter_app/page/student2.dart';
@@ -28,8 +31,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+    
       debugShowCheckedModeBanner: false,
-      home: Student3Page(),
+      home: Admin(),
+      theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }
 }

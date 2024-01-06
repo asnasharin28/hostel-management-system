@@ -14,14 +14,12 @@ import 'package:my_flutter_app/page/warden2.dart';
 import 'package:my_flutter_app/page/warden3.dart';
 import 'package:my_flutter_app/page/wardenattendance.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
+import 'package:my_flutter_app/wardenregister.dart';
 
-import 'page/staff3.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:my_flutter_app/page/parent_student.dart';
 import 'package:my_flutter_app/page/register_parent.dart';
-
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RegisterPage(),
+      home: Login_Page(),
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }

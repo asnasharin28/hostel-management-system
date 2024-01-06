@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Student2Page extends StatefulWidget {
@@ -6,6 +7,9 @@ class Student2Page extends StatefulWidget {
 }
 
 class _Student2PageState extends State<Student2Page> {
+List<String> items = ['My Profile', 'Log Out'];
+  String? dropvalue;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +28,28 @@ class _Student2PageState extends State<Student2Page> {
           ),
           iconSize: 50,
           onPressed: () {
-            // Add your onPressed logic here
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                  0, 100, 100, 0), // Adjust position as needed
+              items: items.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ).then((value) {
+              setState(() {
+                dropvalue = value;
+                if (value == 'My Profile') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Text('My Profile')),
+                  );
+                } else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
+              });
+            });
           },
         ),
         title: Text(

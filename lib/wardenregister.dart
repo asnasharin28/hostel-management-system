@@ -1,23 +1,22 @@
-// ignore_for_file: unused_import
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class register_staff extends StatefulWidget {
-  const register_staff({super.key});
+class WardenRegister extends StatefulWidget {
+  const WardenRegister({super.key});
 
   @override
-  State<register_staff> createState() => _register_staffState();
+  State<WardenRegister> createState() => _WardenRegisterState();
 }
 
-class _register_staffState extends State<register_staff> {
-  final _formKey = GlobalKey<FormState>();
-  final _name = TextEditingController();
-  final _phoneNo = TextEditingController();
+class _WardenRegisterState extends State<WardenRegister> {
+  final _Name = TextEditingController();
+  final _PhoneNo = TextEditingController();
   final _Email = TextEditingController();
   final _Password = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   Future<UserCredential?> registerUserWithEmailAndPassword(
     String email, // Using phone number as email
@@ -43,13 +42,12 @@ class _register_staffState extends State<register_staff> {
   ) async {
     try {
       String? userID = userCredential.user?.uid;
-      await FirebaseFirestore.instance.collection('staffdetails').doc(userID).set({
+      await FirebaseFirestore.instance.collection('Warden').doc(userID).set({
         'UserID': userID,
         'Name': Name,
         'PhoneNO': PhoneNo,
-        'Email': Name, 
-        'Password': PhoneNo, 
-        'Attendance':false,
+        'Email': Name, // Store phone number as email
+        'Password': PhoneNo, // Store admission number as password
       });
     } catch (e) {
       print("Error saving user data to Firestore: $e");
@@ -70,11 +68,9 @@ class _register_staffState extends State<register_staff> {
     }
   }
 
-  @override
   void dispose() {
-    _name.dispose();
-    _phoneNo.dispose();
-
+    _Name.dispose();
+    _PhoneNo.dispose();
     super.dispose();
   }
 
@@ -93,10 +89,9 @@ class _register_staffState extends State<register_staff> {
           title: Text(
             'Register',
             style: TextStyle(
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black),
           ),
           centerTitle: true,
           elevation: 18,
@@ -111,13 +106,16 @@ class _register_staffState extends State<register_staff> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextFormField(
+                  keyboardType:
+                      TextInputType.text, // Set to accept only numeric input
+
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
                     }
-                    return null;
+                    return null; // Return null if the validation passes
                   },
-                  controller: _name,
+                  controller: _Name,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -126,7 +124,7 @@ class _register_staffState extends State<register_staff> {
                         width: 3,
                       ),
                     ),
-                    labelText: "Name*",
+                    labelText: "Name\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
                     ),
@@ -134,13 +132,19 @@ class _register_staffState extends State<register_staff> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(
+                  keyboardType:
+                      TextInputType.phone, // Set to accept only numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly, // Allows only digits
+                  ],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This Field is required';
                     }
-                    return null;
+                    return null; // Return null if the validation passes
                   },
-                  controller: _phoneNo,
+                  controller: _PhoneNo,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -149,7 +153,7 @@ class _register_staffState extends State<register_staff> {
                         width: 3,
                       ),
                     ),
-                    labelText: "Phone No*",
+                    labelText: "Phone No\*",
                     labelStyle: TextStyle(
                       color: Color(0xFFCE5A67),
                     ),
@@ -157,12 +161,18 @@ class _register_staffState extends State<register_staff> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                      color: Colors.black, // Set the text color
+                    ),
+                  ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      String email = _name.text.trim() +
-                          '@gmail.com'; 
+                      String email = _Name.text.trim() +
+                          '@gmail.com'; // Phone number as email
                       String password =
-                          _phoneNo.text.trim(); 
+                          _PhoneNo.text.trim(); // Admission number as password
 
                       UserCredential? userCredential =
                           await registerUserWithEmailAndPassword(
@@ -171,8 +181,8 @@ class _register_staffState extends State<register_staff> {
                       if (userCredential != null) {
                         await saveUserDataToFirestore(
                           userCredential,
-                          _name.text.trim(),
-                          _phoneNo.text.trim(),
+                          _Name.text.trim(),
+                          _PhoneNo.text.trim(),
                         );
 
                         // Navigate to the appropriate page after successful registration
@@ -184,14 +194,9 @@ class _register_staffState extends State<register_staff> {
                     backgroundColor: Color(0xFFCE5A67),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
+                      // Set the border radius for the button
                     ),
-                    elevation: 18,
-                  ),
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    elevation: 18, // Set the elevation for the button
                   ),
                 ),
               ],

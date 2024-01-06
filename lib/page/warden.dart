@@ -209,30 +209,24 @@ class _WardenPageState extends State<WardenPage> {
               },
             ),
             SizedBox(height: 30.0),
-            GestureDetector(
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(10),
-                //height:100,
-                width: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color(0xFFCE5A67),
+            ElevatedButton(
+              
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFCE5A67),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(
-                  'My Profile',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: const Color.fromARGB(255, 15, 14, 14),
-                  ),
-                ),
+                 padding: EdgeInsets.fromLTRB(30, 7, 30, 7),
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WardenProfile()),
-                );
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
               },
+              child: Text('LOGOUT',
+              style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        )),
             ),
           ],
         ),

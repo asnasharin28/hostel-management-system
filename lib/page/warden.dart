@@ -17,15 +17,14 @@ class _WardenPageState extends State<WardenPage> {
   List<String> items = ['My Profile', 'Log Out'];
   String? dropvalue;
 
-
   ////////////////////////////////////
- void _handlefeedetailsContainerClick() {
+  void _handlefeedetailsContainerClick() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => feedetails()),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +61,8 @@ class _WardenPageState extends State<WardenPage> {
                     context,
                     MaterialPageRoute(builder: (context) => WardenProfile()),
                   );
-                }
+                } else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
               });
             });
           },
@@ -115,7 +115,6 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-             
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -188,7 +187,6 @@ class _WardenPageState extends State<WardenPage> {
             ),
             SizedBox(height: 30.0),
             GestureDetector(
-             
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),

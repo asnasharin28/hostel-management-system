@@ -11,10 +11,12 @@ import 'package:my_flutter_app/page/warden.dart';
 class AdminPage extends StatefulWidget {
   @override
   _AdminPageState createState() => _AdminPageState();
-  //final user = FirebaseAuth.instance.currentUser;
+  final user = FirebaseAuth.instance.currentUser;
 }
 
 class _AdminPageState extends State<AdminPage> {
+ List<String> items = ['Log Out'];
+  String? dropvalue;
 
  
   @override
@@ -35,6 +37,23 @@ class _AdminPageState extends State<AdminPage> {
           ),
           iconSize: 50,
           onPressed: () {
+              showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                  0, 100, 100, 0), // Adjust position as needed
+              items: items.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ).then((value) {
+              setState(() {
+                dropvalue = value;
+                 if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
+              });
+            });
             // Add your onPressed logic here
           },
         ),

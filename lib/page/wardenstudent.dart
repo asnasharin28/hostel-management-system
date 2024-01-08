@@ -95,7 +95,8 @@ class _WardenStudentState extends State<WardenStudent> {
                     context,
                     MaterialPageRoute(builder: (context) => WardenProfile()),
                   );
-                }
+                }else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
               });
             });
           },

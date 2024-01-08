@@ -16,6 +16,7 @@ import 'package:my_flutter_app/page/warden.dart';
 import 'package:my_flutter_app/page/warden2.dart';
 import 'package:my_flutter_app/page/warden3.dart';
 import 'package:my_flutter_app/page/wardenattendance.dart';
+import 'package:my_flutter_app/page/wardenprofile.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 
 

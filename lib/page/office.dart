@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 class office extends StatefulWidget {
   const office({super.key});
 
@@ -14,9 +15,9 @@ class office extends StatefulWidget {
 }
 
 class _officeState extends State<office> {
-   TextEditingController admissionNumberController = TextEditingController();
+  TextEditingController admissionNumberController = TextEditingController();
   Future<DocumentSnapshot>? studentData;
-  bool isVisible=false;
+  bool isVisible = false;
 
   Future<DocumentSnapshot> fetchStudentData(String admissionNumber) async {
     return await FirebaseFirestore.instance
@@ -24,7 +25,6 @@ class _officeState extends State<office> {
         .doc(admissionNumber)
         .get();
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _officeState extends State<office> {
           ),
         ),
       ),
-   body: Center(
+      body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -80,7 +80,7 @@ class _officeState extends State<office> {
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
-                      isVisible=true;
+                      isVisible = true;
                       String admissionNumber =
                           admissionNumberController.text.trim();
                       if (admissionNumber.isNotEmpty) {
@@ -99,118 +99,233 @@ class _officeState extends State<office> {
                 child: Column(
                   children: [
                     Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Name',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            height: 1.3,
-                                            color: Color(0xFFCE5A67),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),],),decoration: BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.black,
-                                      ),
-                                    ))),
-                                     SizedBox(height: 20),
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Name',
+                            style: TextStyle(
+                              fontSize: 15,
+                              height: 1.3,
+                              color: Color(0xFFCE5A67),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Department',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            height: 1.3,
-                                            color: Color(0xFFCE5A67),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),],),decoration: BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.black,
-                                      ),
-                                    ))),
-                                     SizedBox(height: 20),
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Department',
+                            style: TextStyle(
+                              fontSize: 15,
+                              height: 1.3,
+                              color: Color(0xFFCE5A67),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Year',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            height: 1.3,
-                                            color: Color(0xFFCE5A67),
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),],),decoration: BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(
-                                        color: Colors.black,
-                                      ),
-                                    ))),
-                  ],
-                ),
-              ),
-                                SizedBox(height: 20),
-                                  Row(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Year',
+                            style: TextStyle(
+                              fontSize: 15,
+                              height: 1.3,
+                              color: Color(0xFFCE5A67),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Show an alert dialog with 'Rent' message
-                     
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFCE5A67),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Payment',
-                      style: TextStyle(
-                        color: Colors.black,
-                        
-                        fontSize: 15,
-                      ),
-                    ),
+                 ElevatedButton(
+  onPressed: () {
+    // Show a dialog with 'Rent' and 'Mess' options
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Handle 'Rent' payment
+                  print('Rent payment selected');
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFCE5A67),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Show an alert dialog with 'Mess' message
-                     
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFCE5A67),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      'Payment History',
-                      style: TextStyle(
-                        color: Colors.black,
-                        
-                        fontSize: 15,
-                      ),
-                    ),
+                ),
+                child: Text('Rent',
+                style: TextStyle(
+                    color: Colors.black, // Change the color of the text here
+                    fontSize: 15,
+                  ),),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle 'Mess' payment
+                  print('Mess payment selected');
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFCE5A67),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                ),
+                child: Text('Mess',
+                style: TextStyle(
+                    color: Colors.black, // Change the color of the text here
+                    fontSize: 15,
+                  ),),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    primary: Color(0xFFCE5A67),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
+  child: Text(
+    'Payment',
+    style: TextStyle(
+      color: Colors.black,
+      fontSize: 15,
+    ),
+  ),
+),
+///////////////////////////////////////
+///PAYMENT HISTORY
+                 ElevatedButton(
+  onPressed: () {
+    // Show a dialog with 'Rent' and 'Mess' options
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment History'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Handle 'Rent' payment
+                  print('Rent payment selected');
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFCE5A67),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text('Rent',
+                style: TextStyle(
+                    color: Colors.black, // Change the color of the text here
+                    fontSize: 15,
+                  ),),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle 'Mess' payment
+                  print('Mess payment selected');
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFCE5A67),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text('Mess',
+                style: TextStyle(
+                    color: Colors.black, // Change the color of the text here
+                    fontSize: 15,
+                  ),),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    primary: Color(0xFFCE5A67),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
+  child: Text(
+    'Payment History',
+    style: TextStyle(
+      color: Colors.black,
+      fontSize: 15,
+    ),
+  ),
+),
                 ],
+              ),
+                  ],
+                ),
+             
+              
               ),
             ],
           ),

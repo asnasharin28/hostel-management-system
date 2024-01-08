@@ -1,13 +1,13 @@
 
+
 import 'package:flutter/material.dart';
 
-class Student1Page extends StatefulWidget {
+class Student3Page extends StatefulWidget {
   @override
-  _Student1PageState createState() => _Student1PageState();
+  _Student3PageState createState() => _Student3PageState();
 }
 
-class _Student1PageState extends State<Student1Page> {
-  bool showButtons = false;
+class _Student3PageState extends State<Student3Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,96 +79,12 @@ class _Student1PageState extends State<Student1Page> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color(0xFFCE5A67),
               ),
-              
-              child: GestureDetector(
-                child: Text(
-                  'Mess details',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: const Color.fromARGB(255, 15, 14, 14),
-                  ),
+              child: Text(
+                'Mess detsils',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: const Color.fromARGB(255, 15, 14, 14),
                 ),
-                onTap: (){
-                  showDialog(context: context,
-                  builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            
-          return AlertDialog(
-            backgroundColor: Color(0xFFF4BF96),
-                contentPadding: EdgeInsets.zero,
-                content: Container(
-                  
-          width: 180.0,
-          height: showButtons ? 180.0 : 50.0,
-          child: showButtons
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        print("Button 1 clicked");
-                      },
-                      child: Text('Yes',
-                      style: TextStyle(
-                        color: Colors.black,
- 
-                      )
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        print("Button 2 clicked");
-                      },
-                      child: Text('No',
-                      style: TextStyle(
-                         color: Colors.black,
-
-                      ),
-                      ),
-                    ),
-                    
-                  ],
-                )
-              : ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      showButtons = true;
-                    });
-                  },
-                  
-                  child: Text('poll',
-                  style: TextStyle(
-                    color: Colors.black,
-              
-                  ),
-                  
-                  ),
-                ),
-                ),
-                actions: <Widget>[
-                  SizedBox(
-                    height: 50,
-                  ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            
-            child: Text('Close',
-            style: TextStyle(
-               color: Colors.black,
-
-            ),),
-          ),
-                ],
-              );
-          }
-        );
-                  }
-                  );
-                  
-                },
               ),
             ),
             SizedBox(height: 30.0),
@@ -181,10 +97,49 @@ class _Student1PageState extends State<Student1Page> {
                 borderRadius: BorderRadius.circular(10),
                 color: Color(0xFFCE5A67),
               ),
-              child: GestureDetector(
+              child: Text(
+                'Attendence',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: const Color.fromARGB(255, 15, 14, 14),
+                ),
+              ),
+            ),
+            SizedBox(height: 30.0),
+           Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              //height:100,
+             width:200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xFFCE5A67),
+              ),
+               child: GestureDetector(
                 onTap: () {
-                  showDialog(
-    context: context,
+                  _showAlertDialog();
+                },
+              child: Text(
+                'Fee details',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: const Color.fromARGB(255, 15, 14, 14),
+                ),
+              ),
+            ),
+           ),
+           
+          ]
+        ),
+      ),
+    );
+  }
+
+ void _showAlertDialog() {
+ 
+
+  showDialog(
+    context:context,
     builder: (BuildContext context) {
       return AlertDialog(
         contentPadding: EdgeInsets.zero,
@@ -240,45 +195,6 @@ class _Student1PageState extends State<Student1Page> {
       );
     },
   );
-                },
-              child: Text(
-                'Fee Details',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 15, 14, 14),
-                ),
-              ),
-            )),
-            SizedBox(height: 30.0),
-           Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              //height:100,
-             width:200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFFCE5A67),
-              ),
-              child: Text(
-                'Attendece',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: const Color.fromARGB(255, 15, 14, 14),
-                ),
-              ),
-            ),
-            SizedBox(height: 30.0),
-           
-           
-          ],
-        ),
-      ),
-      
-    );
-    
-  }
-  
-
+}
 
 }
- 

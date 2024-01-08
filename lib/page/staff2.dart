@@ -37,6 +37,15 @@ class _StaffPage2State extends State<StaffPage2> {
     return attandanded.toString();
   }
 
+  Future<String> MessOut() async {
+    final QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('student')
+        .where('Mess', isEqualTo: false)
+        .get();
+    final int attandanded = snapshot.docs.length;
+    return attandanded.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,10 +208,11 @@ class _StaffPage2State extends State<StaffPage2> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Color(0xFFFCF5ED),
           contentPadding: EdgeInsets.zero,
           content: SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -225,8 +235,50 @@ class _StaffPage2State extends State<StaffPage2> {
                           })
                     ],
                   ),
-                  Text("     Mess In:"),
-                  Text("     Mess Out:"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Text("Mess In:"),
+                      FutureBuilder<String>(
+                          future: MessIn(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return Text(
+                                snapshot.data!,
+                              );
+                            }
+                          })
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Text("Mess Out:"),
+                      FutureBuilder<String>(
+                          future: MessOut(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return Text(
+                                snapshot.data!,
+                              );
+                            }
+                          })
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -236,7 +288,10 @@ class _StaffPage2State extends State<StaffPage2> {
               onPressed: () {
                 Navigator.pop(context); // Close the AlertDialog
               },
-              child: Text('Close'),
+              child: Text(
+                'Close',
+                style: TextStyle(color: Color(0xFFCE5A67)),
+              ),
             ),
           ],
         );

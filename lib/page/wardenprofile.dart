@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/wardenedit.dart';
 
@@ -12,6 +13,17 @@ class _WardenProfileState extends State<WardenProfile> {
 
   List<String> items = ['My Profile', 'Log Out'];
   String? dropvalue;
+   Future<DocumentSnapshot> getUserData(String userID) async {
+    return await FirebaseFirestore.instance
+        .collection('Warden')
+        .doc(userID)
+        .get();
+  }
+  
+
+  Future<QuerySnapshot> getData() async {
+    return await FirebaseFirestore.instance.collection('Warden').get();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,126 +74,200 @@ class _WardenProfileState extends State<WardenProfile> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 30,
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-              padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-              width: 500,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xFFCE5A67),
-              ),
+       body: FutureBuilder<QuerySnapshot>(
+          future: getData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(); // Show a loading indicator while fetching data
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return Text('No Data Available');
+            } else {
+              List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+              return ListView.builder(
+                  itemCount: documents.length,
+                  itemBuilder: (context, index) {
+                    final phoneNo = documents[index]['PhoneNO'];
+                    final name = documents[index]['Name'];
+                    final email = documents[index]['Email'];
+
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Name',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Color(0xFFCE5A67),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    '$name',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ))),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Phone No',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Color(0xFFCE5A67),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    '$phoneNo',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ))),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Email',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Color(0xFFCE5A67),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    '$email@gmail.com',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      height: 1.3,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ))),
+                               SizedBox(
+                            height: 30,
+                          ),
+            Center(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 100,
-                        child: Text(
-                          'Name',
-                          style: TextStyle(
-                            fontSize: 15,
-                            height: 1.3,
-                            color: const Color.fromARGB(255, 15, 14, 14),
-                            fontWeight: FontWeight.w500,
-                          ),
+                  Container(
+                    width: 220,
+                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                    child: ElevatedButton(
+                      child: Text(
+                        "Edit",
+                        style: TextStyle(
+              color: Colors.black,
                         ),
                       ),
-                      Text(
-                        ': Fathima Dhilshana MP',
-                        style: TextStyle(
-                          fontSize: 15,
-                          height: 1.3,
-                          color: const Color.fromARGB(255, 15, 14, 14),
-                          fontWeight: FontWeight.w500,
+                      onPressed: () {
+                        Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WardenEdit()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFFCE5A67),
+                        shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 100,
-                        child: Text(
-                          'Phone No',
-                          style: TextStyle(
-                            fontSize: 15,
-                            height: 1.3,
-                            color: const Color.fromARGB(255, 15, 14, 14),
-                            fontWeight: FontWeight.w500,
-                          ),
+                  SizedBox(width: 20), // Add some space between buttons
+                  Container(
+                    width: 220,
+                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                    child: ElevatedButton(
+                      child: Text(
+                        "Log Out",
+                        style: TextStyle(
+              color: Colors.black,
                         ),
                       ),
-                      Text(
-                        ': 7510779845',
-                        style: TextStyle(
-                          fontSize: 15,
-                          height: 1.3,
-                          color: const Color.fromARGB(255, 15, 14, 14),
-                          fontWeight: FontWeight.w500,
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFFCE5A67),
+                        shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
                         ),
-                      )
-                    ],
-                  )
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Container(
-              width: 500,
-              margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: ElevatedButton(
-                child: Text(
-                  "Edit",
-                  style: TextStyle(
-                    color: Colors.black, // Set the text color
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WardenEdit()));
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFFCE5A67),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // Set the border radius for the button
-                  ),
 
-                  // Set the elevation for the button
-                ),
-              ),
-            ),
-            Container(
-              width: 500,
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: ElevatedButton(
-                child: Text(
-                  "Log Out",
-                  style: TextStyle(
-                    color: Colors.black, // Set the text color
-                  ),
-                ),
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Color(0xFFCE5A67),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    // Set the border radius for the button
-                  ),
-
-                  // Set the elevation for the button
-                ),
-              ),
-            )
-          ],
-        ),
+                  ],
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }

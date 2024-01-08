@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:my_flutter_app/page/warden.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,10 +18,17 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoginSectionVisible = false;
 
   Future LOGIN() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _PasswordController.text.trim(),
-    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _PasswordController.text.trim(),
+      );
+    } catch (e) {
+      // Handle and display the login error
+      print("Login Error: $e");
+      // Show an error message to the user
+      // You can use a SnackBar or AlertDialog to display the error message
+    }
   }
 
   String getHeaderText() {
@@ -51,7 +59,6 @@ class _LoginPageState extends State<LoginPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 30),
             //userid
             TextField(
               controller: _emailController,
@@ -155,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
-                height: 33,
+                height: 25,
               ),
               const Text(
                 'Choose account type',
@@ -165,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -351,10 +358,7 @@ class _LoginPageState extends State<LoginPage> {
                   /////////////////////////////////////////
                 ],
               ),
-
-             
-
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               Text(
                 getHeaderText(),
                 style: TextStyle(
@@ -362,7 +366,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               if (isLoginSectionVisible) _buildLoginSection(),
             ],
           ),

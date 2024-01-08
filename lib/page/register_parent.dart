@@ -28,7 +28,7 @@ class __register_parentStateState extends State<register_parent> {
       String RoomNo,
      ) async {
     await FirebaseFirestore.instance
-        .collection('students')
+        .collection('parent')
         
         .add({
       'Name': Name,

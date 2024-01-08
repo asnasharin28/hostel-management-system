@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/wardenprofile.dart';
 
@@ -60,7 +61,8 @@ class _WardenAttendanceState extends State<WardenAttendance> {
                     context,
                     MaterialPageRoute(builder: (context) => WardenProfile()),
                   );
-                }
+                }else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
               });
             });
             },

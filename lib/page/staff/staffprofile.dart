@@ -251,7 +251,8 @@ class _StaffProfileState extends State<StaffProfile> {
                               },
                               child: Container(
                                   color: Color(0xFFCE5A67),
-                                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                                  width: 50,
+                                  // padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
                                   margin: EdgeInsets.only(left: 10),
                                   child: Text(
                                     'Edit',

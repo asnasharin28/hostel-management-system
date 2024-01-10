@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/Login_page.dart';
+import 'package:my_flutter_app/page/codeQr.dart';
 import 'package:my_flutter_app/page/feedetails.dart';
 import 'package:my_flutter_app/page/admin.dart';
 import 'package:my_flutter_app/page/office.dart';
@@ -15,6 +16,7 @@ import 'package:my_flutter_app/page/warden.dart';
 import 'package:my_flutter_app/page/warden2.dart';
 import 'package:my_flutter_app/page/warden3.dart';
 import 'package:my_flutter_app/page/wardenattendance.dart';
+import 'package:my_flutter_app/page/wardenoffice.dart';
 import 'package:my_flutter_app/page/wardenprofile.dart';
 import 'package:my_flutter_app/page/wardenstudent.dart';
 
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
     
       debugShowCheckedModeBanner: false,
-      home: Login_Page(),
+      home: QrCodeScannerPage(),
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }

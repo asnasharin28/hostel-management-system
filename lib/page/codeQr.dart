@@ -30,41 +30,38 @@ class _QrCodeScannerPageState extends State<QrCodeScannerPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
+                
                 height: 30,
               ),
               Text('Scan QR Code'),
-              SizedBox(height: 16), // Add some space between the text and QR code view
+              SizedBox(height: 16),
               Container(
                 decoration: BoxDecoration(
-                  color:Color(0xFFCE5A67),
-                   borderRadius: BorderRadius.circular(10),
-                  
+                  color: Color(0xFFCE5A67),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                padding: EdgeInsets.fromLTRB(30,50,30,50),
+                padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
                 height: 350,
-                width:250,
-                child: Expanded(
-                  child: QRView(
-                    key: qrKey,
-                    onQRViewCreated: _onQRViewCreated,
-                    overlay: QrScannerOverlayShape(
+                width: 250,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  overlay: QrScannerOverlayShape(
                     borderColor: Colors.white,
                     borderRadius: 10,
                     borderLength: 30,
                     borderWidth: 10,
-                    cutOutSize: 250, // Adjust cutOutSize to fit the scanned QR code as a square
-                  ),
+                    cutOutSize: 250,
                   ),
                 ),
               ),
-              SizedBox(height: 16), // Add some space between the QR code view and the result
-              Text('Result: $result'), // Display the scanned QR code result
+              SizedBox(height: 16),
+              Text('Result: $result'),
             ],
           ),
         ),

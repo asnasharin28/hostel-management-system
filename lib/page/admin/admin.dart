@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/parent/parent_myprofile.dart';
-import 'package:my_flutter_app/page/staff/staff1.dart';
+import 'package:my_flutter_app/page/staff/staff2.dart';
 import 'package:my_flutter_app/page/student/student1.dart';
-import '../staff/staff1.dart';
 import 'package:my_flutter_app/page/warden/warden.dart';
-
 
 class AdminPage extends StatefulWidget {
   @override
@@ -15,8 +13,9 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
+  List<String> items = ['Log Out'];
+  String? dropvalue;
 
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +34,22 @@ class _AdminPageState extends State<AdminPage> {
           ),
           iconSize: 50,
           onPressed: () {
-            // Add your onPressed logic here
+            showMenu(
+              context: context,
+              position: RelativeRect.fromLTRB(
+                  0, 100, 100, 0), // Adjust position as needed
+              items: items.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ).then((value) {
+              setState(() {
+                dropvalue = value;
+                if (value == 'Log Out') (FirebaseAuth.instance.signOut());
+              });
+            });
           },
         ),
         title: Text(
@@ -54,12 +68,12 @@ class _AdminPageState extends State<AdminPage> {
               height: 70,
             ),
             GestureDetector(
-                onTap: (){
+              onTap: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => WardenPage()),
-  );  
-                } ,
+                  context,
+                  MaterialPageRoute(builder: (context) => WardenPage()),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -87,37 +101,39 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             SizedBox(height: 30.0),
-             GestureDetector(
-               onTap: (){
-               Navigator.push(
-                 context,
-                 MaterialPageRoute(builder: (context) => Student1Page()),
-               );  },
-               child: Container(
-                 alignment: Alignment.center,
-                 padding: EdgeInsets.all(10),
-                 //height:100,
-                 width: 200,
-                 decoration: BoxDecoration(
-                   borderRadius: BorderRadius.circular(10),
-                   color: Color(0xFFCE5A67),
-                 ),
-                 child: Text(
-                   'Student',
-                   style: TextStyle(
-                     fontSize: 20,
-                     color: const Color.fromARGB(255, 15, 14, 14),
-                   ),
-                 ),
-               ),
-             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Student1Page()),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Student',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
+                ),
+              ),
+            ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => parent_myprofile()),
-  );  },
+                  context,
+                  MaterialPageRoute(builder: (context) => parent_myprofile()),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -136,14 +152,14 @@ class _AdminPageState extends State<AdminPage> {
                 ),
               ),
             ),
-
             SizedBox(height: 30.0),
-            
-        GestureDetector( onTap: (){
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => StaffPage1()),
-  );  },
+                  context,
+                  MaterialPageRoute(builder: (context) => StaffPage2()),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -163,31 +179,28 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             SizedBox(height: 30.0),
-            
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 //go to officepage
               },
-                 child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
-                  //height:100,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFFCE5A67),
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Office',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
                   ),
-                  child: Text(
-                    'Office',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: const Color.fromARGB(255, 15, 14, 14),
-                    ),
-                  ),
-                               ),
-               ),
-            
-            
+                ),
+              ),
+            ),
           ],
         ),
       ),

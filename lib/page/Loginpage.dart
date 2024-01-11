@@ -61,6 +61,8 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  bool passwordVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -303,8 +305,19 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 30),
                       //password
                       TextField(
+                        obscureText: passwordVisible,
                         controller: _PasswordController,
                         decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: Icon(passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            onPressed: () {
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                             borderSide: const BorderSide(

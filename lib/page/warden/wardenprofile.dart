@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/warden/wardenedit.dart';
 
@@ -60,19 +61,45 @@ class _WardenProfileState extends State<WardenProfile> {
                     context,
                     MaterialPageRoute(builder: (context) => WardenProfile()),
                   );
-                }
+                }else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
               });
             });
           },
         ),
-        title: Text(
-          'Name\nWarden',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
+        title: FutureBuilder<User?>(
+            future: FirebaseAuth.instance.authStateChanges().first,
+            builder: (context, userSnapshot) {
+              if (userSnapshot.connectionState == ConnectionState.waiting) {
+                return Text('Loading...');
+              } else {
+                final currentUserID = userSnapshot.data!.uid;
+
+                return FutureBuilder<DocumentSnapshot>(
+                  future: getUserData(currentUserID),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text('Loading...');
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data == null) {
+                      return Text('Name\nWarden');
+                    } else {
+                      final userName = snapshot.data!['Name'];
+
+                      return Text(
+                        '$userName\nWarden',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      );
+                    }
+                  },
+                );
+              }
+            }),
       ),
        body: FutureBuilder<QuerySnapshot>(
           future: getData(),

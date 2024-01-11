@@ -95,7 +95,7 @@ class _WardenStudentState extends State<WardenStudent> {
                     context,
                     MaterialPageRoute(builder: (context) => WardenProfile()),
                   );
-                }else if (value == 'Log Out')
+                } else if (value == 'Log Out')
                   (FirebaseAuth.instance.signOut());
               });
             });
@@ -103,27 +103,40 @@ class _WardenStudentState extends State<WardenStudent> {
         ),
         title: Row(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Name',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  'Warden',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
+            FutureBuilder<User?>(
+                future: FirebaseAuth.instance.authStateChanges().first,
+                builder: (context, userSnapshot) {
+                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading...');
+                  } else {
+                    final currentUserID = userSnapshot.data!.uid;
+
+                    return FutureBuilder<DocumentSnapshot>(
+                      future: getUserData(currentUserID),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text('Loading...');
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData || snapshot.data == null) {
+                          return Text('Name\nWarden');
+                        } else {
+                          final userName = snapshot.data!['Name'];
+
+                          return Text(
+                            '$userName\nWarden',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }
+                }),
             Spacer(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

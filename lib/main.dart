@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/Login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_flutter_app/page/student/student1.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Student1Page(),
+      home: Login_Page(),
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }

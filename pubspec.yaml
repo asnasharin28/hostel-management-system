@@ -40,6 +40,7 @@ dependencies:
   cloud_firestore: ^4.13.6
   firebase_auth: ^4.15.3
   qr_flutter: ^4.1.0
+  flutter_stream_listener: ^2.0.0
 
 
 dev_dependencies:

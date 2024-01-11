@@ -20,7 +20,6 @@ class _StaffProfileState extends State<StaffProfile> {
         .doc(userID)
         .get();
   }
-  
 
   Future<QuerySnapshot> getData() async {
     return await FirebaseFirestore.instance.collection('staffdetails').get();
@@ -111,7 +110,9 @@ class _StaffProfileState extends State<StaffProfile> {
           future: getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Show a loading indicator while fetching data
+              return Center(
+                  child:
+                      CircularProgressIndicator()); // Show a loading indicator while fetching data
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data == null) {
@@ -251,9 +252,10 @@ class _StaffProfileState extends State<StaffProfile> {
                               },
                               child: Container(
                                   color: Color(0xFFCE5A67),
-                                  width: 50,
+
                                   // padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
                                   margin: EdgeInsets.only(left: 10),
+                                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                                   child: Text(
                                     'Edit',
                                     style: TextStyle(color: Colors.black),

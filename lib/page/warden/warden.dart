@@ -120,14 +120,6 @@ class _WardenPageState extends State<WardenPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Color(0xFFCE5A67),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 50, 48, 48).withOpacity(0.2),
-                      spreadRadius: 3,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
                 ),
                 child: Text(
                   'Students',

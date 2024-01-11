@@ -62,7 +62,8 @@ class _parent_myprofileState extends State<parent_myprofile> {
                     context,
                     MaterialPageRoute(builder: (context) => parent_myprofile()),
                   );
-                }
+                } else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
               });
             });
           },
@@ -112,15 +113,18 @@ class _parent_myprofileState extends State<parent_myprofile> {
           future: getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Show a loading indicator while fetching data
+              return Center(
+                  child:
+                      CircularProgressIndicator()); // Show a loading indicator while fetching data
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data == null) {
-              return Text('No Data Available');
+              return Center(child: Text('No Data Available'));
             } else {
               List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+
               return ListView.builder(
-                  itemCount: documents.length,
+                  itemCount: 1,
                   itemBuilder: (context, index) {
                     final phoneNo = documents[index]['PhoneNO'];
                     final name = documents[index]['Name'];

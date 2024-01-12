@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:my_flutter_app/page/warden/wardenstaff.dart';
 
 class register_staff extends StatefulWidget {
   const register_staff({super.key});
@@ -16,8 +18,6 @@ class _register_staffState extends State<register_staff> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phoneNo = TextEditingController();
-  final _Email = TextEditingController();
-  final _Password = TextEditingController();
 
   Future<UserCredential?> registerUserWithEmailAndPassword(
     String email, // Using phone number as email
@@ -43,13 +43,16 @@ class _register_staffState extends State<register_staff> {
   ) async {
     try {
       String? userID = userCredential.user?.uid;
-      await FirebaseFirestore.instance.collection('staffdetails').doc(userID).set({
+      await FirebaseFirestore.instance
+          .collection('staffdetails')
+          .doc(userID)
+          .set({
         'UserID': userID,
         'Name': Name,
         'PhoneNO': PhoneNo,
-        'Email': Name, 
-        'Password': PhoneNo, 
-        'Attendance':false,
+        'Email': Name+'@gmail.com',
+        'Password': PhoneNo,
+        'Attendance': false,
       });
     } catch (e) {
       print("Error saving user data to Firestore: $e");
@@ -57,17 +60,17 @@ class _register_staffState extends State<register_staff> {
     }
   }
 
-  Future SignUp() async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _Email.text.trim(),
-        password: _Password.text.trim(),
-      );
-    } catch (e) {
-      // Handle sign-up errors here
-      print("Error: $e");
-      // You can show an error message to the user if sign-up fails
-    }
+  Future SignInWarden() async {
+    DocumentSnapshot wardenSnapshot = await FirebaseFirestore.instance
+        .collection('Warden')
+        .doc('Y19H4JCbyleWxjVMqem3a1RQ8Qz1')
+        .get();
+    String email = wardenSnapshot.get('Email');
+    String password = wardenSnapshot.get('Password');
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email + '@gmail.com',
+      password: password,
+    );
   }
 
   @override
@@ -154,15 +157,14 @@ class _register_staffState extends State<register_staff> {
                       color: Color(0xFFCE5A67),
                     ),
                   ),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      String email = _name.text.trim() +
-                          '@gmail.com'; 
-                      String password =
-                          _phoneNo.text.trim(); 
+                      String email = _name.text.trim() + '@gmail.com';
+                      String password = _phoneNo.text.trim();
 
                       UserCredential? userCredential =
                           await registerUserWithEmailAndPassword(
@@ -175,8 +177,41 @@ class _register_staffState extends State<register_staff> {
                           _phoneNo.text.trim(),
                         );
 
-                        // Navigate to the appropriate page after successful registration
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Wardenstaff()));
                       }
+                      // ignore: unused_element
+                      Future SignInWarden() async {
+                        DocumentSnapshot wardenSnapshot =
+                            await FirebaseFirestore.instance
+                                .collection('Warden')
+                                .doc('Y19H4JCbyleWxjVMqem3a1RQ8Qz1')
+                                .get();
+                        String email = wardenSnapshot.get('Email');
+                        String password = wardenSnapshot.get('Password');
+                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: email + '@gmail.com',
+                          password: password,
+                        );
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Student registered successfully!'),
+                            duration: Duration(seconds: 3),
+                            action: SnackBarAction(
+                              label: 'OK',
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Wardenstaff()),
+                                );
+                              },
+                            )),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

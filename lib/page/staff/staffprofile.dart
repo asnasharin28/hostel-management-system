@@ -1,29 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/page/wardenedit.dart';
+import 'package:my_flutter_app/page/staff/staffedit.dart';
 
-class WardenProfile extends StatefulWidget {
-  const WardenProfile({super.key});
+class StaffProfile extends StatefulWidget {
+  const StaffProfile({super.key});
 
   @override
-  State<WardenProfile> createState() => _WardenProfileState();
+  State<StaffProfile> createState() => _StaffProfileState();
 }
 
-class _WardenProfileState extends State<WardenProfile> {
-
+class _StaffProfileState extends State<StaffProfile> {
   List<String> items = ['My Profile', 'Log Out'];
   String? dropvalue;
-   Future<DocumentSnapshot> getUserData(String userID) async {
+
+  Future<DocumentSnapshot> getUserData(String userID) async {
     return await FirebaseFirestore.instance
-        .collection('Warden')
+        .collection('staffdetails')
         .doc(userID)
         .get();
   }
-  
 
   Future<QuerySnapshot> getData() async {
-    return await FirebaseFirestore.instance.collection('Warden').get();
+    return await FirebaseFirestore.instance.collection('staffdetails').get();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +46,7 @@ class _WardenProfileState extends State<WardenProfile> {
             showMenu(
               context: context,
               position: RelativeRect.fromLTRB(
-                  0, 100, 100, 0), 
+                  0, 100, 100, 0), // Adjust position as needed
               items: items.map((String item) {
                 return PopupMenuItem<String>(
                   value: item,
@@ -58,27 +59,60 @@ class _WardenProfileState extends State<WardenProfile> {
                 if (value == 'My Profile') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => WardenProfile()),
+                    MaterialPageRoute(builder: (context) => StaffProfile()),
                   );
                 }
               });
             });
           },
         ),
-        title: Text(
-          'Name\nWarden',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+        title: FutureBuilder<User?>(
+          future: FirebaseAuth.instance.authStateChanges().first,
+          builder: (context, userSnapshot) {
+            if (userSnapshot.connectionState == ConnectionState.waiting) {
+              return Text('Loading...');
+            } else if (userSnapshot.hasError) {
+              return Text('Error: ${userSnapshot.error}');
+            } else if (!userSnapshot.hasData || userSnapshot.data == null) {
+              return Text('Name\nStaff');
+            } else {
+              final currentUserID = userSnapshot.data!.uid;
+
+              return FutureBuilder<DocumentSnapshot>(
+                future: getUserData(currentUserID),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading...');
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data == null) {
+                    return Text('Name\nStaff');
+                  } else {
+                    final userName = snapshot.data![
+                        'Name']; // Replace 'Name' with your actual field name
+
+                    return Text(
+                      '$userName\nStaff',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    );
+                  }
+                },
+              );
+            }
+          },
         ),
       ),
-       body: FutureBuilder<QuerySnapshot>(
+      body: FutureBuilder<QuerySnapshot>(
           future: getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Show a loading indicator while fetching data
+              return Center(
+                  child:
+                      CircularProgressIndicator()); // Show a loading indicator while fetching data
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data == null) {
@@ -206,69 +240,30 @@ class _WardenProfileState extends State<WardenProfile> {
                                   color: Colors.black,
                                 ),
                               ))),
-                               SizedBox(
-                            height: 30,
+                          SizedBox(
+                            height: 10,
                           ),
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    width: 220,
-                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                    child: ElevatedButton(
-                      child: Text(
-                        "Edit",
-                        style: TextStyle(
-              color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => WardenEdit()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Color(0xFFCE5A67),
-                        shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20), // Add some space between buttons
-                  Container(
-                    width: 220,
-                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                    child: ElevatedButton(
-                      child: Text(
-                        "Log Out",
-                        style: TextStyle(
-              color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Color(0xFFCE5A67),
-                        shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => StaffEdit()));
+                              },
+                              child: Container(
+                                  color: Color(0xFFCE5A67),
 
-                  ],
-                );
-              },
-            );
-          }
-        },
-      ),
+                                  // padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                                  margin: EdgeInsets.only(left: 10),
+                                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                  child: Text(
+                                    'Edit',
+                                    style: TextStyle(color: Colors.black),
+                                  )))
+                        ]);
+                  });
+            }
+          }),
     );
   }
 }

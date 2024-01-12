@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/page/staff2.dart';
-import 'package:my_flutter_app/page/staffprofile.dart';
+import 'package:my_flutter_app/page/staff/staffprofile.dart';
 
 class StaffEdit extends StatefulWidget {
   const StaffEdit({super.key});
@@ -114,7 +113,7 @@ class _StaffEditState extends State<StaffEdit> {
             future: getData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                return Center(child: CircularProgressIndicator()); // Show a loading indicator while fetching data
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data == null) {

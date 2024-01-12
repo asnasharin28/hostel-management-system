@@ -1,24 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/page/parent_myprofile.dart';
-import 'package:my_flutter_app/page/staff1.dart';
-import 'package:my_flutter_app/page/student1.dart';
-import 'staff1.dart';
-import 'package:my_flutter_app/page/warden.dart';
-
+import 'package:my_flutter_app/page/parent/parent_myprofile.dart';
+import 'package:my_flutter_app/page/staff/staff2.dart';
+import 'package:my_flutter_app/page/student/student1.dart';
+import 'package:my_flutter_app/page/warden/warden.dart';
 
 class AdminPage extends StatefulWidget {
   @override
   _AdminPageState createState() => _AdminPageState();
-  final user = FirebaseAuth.instance.currentUser;
+  //final user = FirebaseAuth.instance.currentUser;
 }
 
 class _AdminPageState extends State<AdminPage> {
- List<String> items = ['Log Out'];
+  List<String> items = ['Log Out'];
   String? dropvalue;
 
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +34,7 @@ class _AdminPageState extends State<AdminPage> {
           ),
           iconSize: 50,
           onPressed: () {
-              showMenu(
+            showMenu(
               context: context,
               position: RelativeRect.fromLTRB(
                   0, 100, 100, 0), // Adjust position as needed
@@ -50,11 +47,9 @@ class _AdminPageState extends State<AdminPage> {
             ).then((value) {
               setState(() {
                 dropvalue = value;
-                 if (value == 'Log Out')
-                  (FirebaseAuth.instance.signOut());
+                if (value == 'Log Out') (FirebaseAuth.instance.signOut());
               });
             });
-            // Add your onPressed logic here
           },
         ),
         title: Text(
@@ -73,12 +68,12 @@ class _AdminPageState extends State<AdminPage> {
               height: 70,
             ),
             GestureDetector(
-                onTap: (){
+              onTap: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => WardenPage()),
-  );  
-                } ,
+                  context,
+                  MaterialPageRoute(builder: (context) => WardenPage()),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -106,37 +101,39 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             SizedBox(height: 30.0),
-             GestureDetector(
-               onTap: (){
-               Navigator.push(
-                 context,
-                 MaterialPageRoute(builder: (context) => Student1Page()),
-               );  },
-               child: Container(
-                 alignment: Alignment.center,
-                 padding: EdgeInsets.all(10),
-                 //height:100,
-                 width: 200,
-                 decoration: BoxDecoration(
-                   borderRadius: BorderRadius.circular(10),
-                   color: Color(0xFFCE5A67),
-                 ),
-                 child: Text(
-                   'Student',
-                   style: TextStyle(
-                     fontSize: 20,
-                     color: const Color.fromARGB(255, 15, 14, 14),
-                   ),
-                 ),
-               ),
-             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Student1Page()),
+                );
+              },
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Student',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
+                  ),
+                ),
+              ),
+            ),
             SizedBox(height: 30.0),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => parent_myprofile()),
-  );  },
+                  context,
+                  MaterialPageRoute(builder: (context) => parent_myprofile()),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -155,14 +152,14 @@ class _AdminPageState extends State<AdminPage> {
                 ),
               ),
             ),
-
             SizedBox(height: 30.0),
-            
-        GestureDetector( onTap: (){
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => StaffPage1()),
-  );  },
+                  context,
+                  MaterialPageRoute(builder: (context) => StaffPage2()),
+                );
+              },
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(10),
@@ -182,31 +179,28 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             SizedBox(height: 30.0),
-            
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 //go to officepage
               },
-                 child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
-                  //height:100,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFFCE5A67),
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                //height:100,
+                width: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color(0xFFCE5A67),
+                ),
+                child: Text(
+                  'Office',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: const Color.fromARGB(255, 15, 14, 14),
                   ),
-                  child: Text(
-                    'Office',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: const Color.fromARGB(255, 15, 14, 14),
-                    ),
-                  ),
-                               ),
-               ),
-            
-            
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,31 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/page/parentedit.dart';
+import 'package:my_flutter_app/page/warden/wardenedit.dart';
 
-class parent_myprofile extends StatefulWidget {
-  const parent_myprofile({super.key});
+class WardenProfile extends StatefulWidget {
+  const WardenProfile({super.key});
 
   @override
-  State<parent_myprofile> createState() => _parent_myprofileState();
+  State<WardenProfile> createState() => _WardenProfileState();
 }
 
-class _parent_myprofileState extends State<parent_myprofile> {
+class _WardenProfileState extends State<WardenProfile> {
+
   List<String> items = ['My Profile', 'Log Out'];
   String? dropvalue;
-
-  Future<DocumentSnapshot> getUserData(String userID) async {
+   Future<DocumentSnapshot> getUserData(String userID) async {
     return await FirebaseFirestore.instance
-        .collection('parent')
+        .collection('Warden')
         .doc(userID)
         .get();
   }
+  
 
   Future<QuerySnapshot> getData() async {
-    return await FirebaseFirestore.instance.collection('parent').get();
+    return await FirebaseFirestore.instance.collection('Warden').get();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +38,7 @@ class _parent_myprofileState extends State<parent_myprofile> {
         ),
         leading: IconButton(
           icon: Icon(
-            Icons.escalator_warning,
+            Icons.account_circle,
             color: Colors.black,
           ),
           iconSize: 50,
@@ -47,7 +46,7 @@ class _parent_myprofileState extends State<parent_myprofile> {
             showMenu(
               context: context,
               position: RelativeRect.fromLTRB(
-                  0, 100, 100, 0), // Adjust position as needed
+                  0, 100, 100, 0), 
               items: items.map((String item) {
                 return PopupMenuItem<String>(
                   value: item,
@@ -60,55 +59,49 @@ class _parent_myprofileState extends State<parent_myprofile> {
                 if (value == 'My Profile') {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => parent_myprofile()),
+                    MaterialPageRoute(builder: (context) => WardenProfile()),
                   );
-                }
+                }else if (value == 'Log Out')
+                  (FirebaseAuth.instance.signOut());
               });
             });
           },
         ),
         title: FutureBuilder<User?>(
-          future: FirebaseAuth.instance.authStateChanges().first,
-          builder: (context, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return Text('Loading...');
-            } else if (userSnapshot.hasError) {
-              return Text('Error: ${userSnapshot.error}');
-            } else if (!userSnapshot.hasData || userSnapshot.data == null) {
-              return Text('Name\nParent');
-            } else {
-              final currentUserID = userSnapshot.data!.uid;
+            future: FirebaseAuth.instance.authStateChanges().first,
+            builder: (context, userSnapshot) {
+              if (userSnapshot.connectionState == ConnectionState.waiting) {
+                return Text('Loading...');
+              } else {
+                final currentUserID = userSnapshot.data!.uid;
 
-              return FutureBuilder<DocumentSnapshot>(
-                future: getUserData(currentUserID),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text('Loading...');
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else if (!snapshot.hasData || snapshot.data == null) {
-                    return Text('Name\nParent');
-                  } else {
-                    final userName = snapshot.data![
-                        'Name']; // Replace 'Name' with your actual field name
+                return FutureBuilder<DocumentSnapshot>(
+                  future: getUserData(currentUserID),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text('Loading...');
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data == null) {
+                      return Text('Name\nWarden');
+                    } else {
+                      final userName = snapshot.data!['Name'];
 
-                    return Text(
-                      '$userName\nParent',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    );
-                  }
-                },
-              );
-            }
-          },
-        ),
+                      return Text(
+                        '$userName\nWarden',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      );
+                    }
+                  },
+                );
+              }
+            }),
       ),
-      backgroundColor: const Color(0xFFFCF5ED),
-      body: FutureBuilder<QuerySnapshot>(
+       body: FutureBuilder<QuerySnapshot>(
           future: getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -124,9 +117,7 @@ class _parent_myprofileState extends State<parent_myprofile> {
                   itemBuilder: (context, index) {
                     final phoneNo = documents[index]['PhoneNO'];
                     final name = documents[index]['Name'];
-                    final studentName = documents[index]['StudentName'];
-                    final studentPhoneNo = documents[index]['StudentPhoneNO'];
-                    final roomNo = documents[index]['RoomNO'];
+                    final email = documents[index]['Email'];
 
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +170,7 @@ class _parent_myprofileState extends State<parent_myprofile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'PhoneNo',
+                                    'Phone No',
                                     style: TextStyle(
                                       fontSize: 15,
                                       height: 1.3,
@@ -216,7 +207,7 @@ class _parent_myprofileState extends State<parent_myprofile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Student Name',
+                                    'Email',
                                     style: TextStyle(
                                       fontSize: 15,
                                       height: 1.3,
@@ -226,7 +217,7 @@ class _parent_myprofileState extends State<parent_myprofile> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    '$studentName',
+                                    '$email@gmail.com',
                                     style: TextStyle(
                                       fontSize: 15,
                                       height: 1.3,
@@ -242,102 +233,69 @@ class _parent_myprofileState extends State<parent_myprofile> {
                                   color: Colors.black,
                                 ),
                               ))),
-                          SizedBox(
-                            height: 10,
+                               SizedBox(
+                            height: 30,
                           ),
-                          Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Student Phone No',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      height: 1.3,
-                                      color: Color(0xFFCE5A67),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    '$studentPhoneNo',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      height: 1.3,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ))),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Room No',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      height: 1.3,
-                                      color: Color(0xFFCE5A67),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    '$roomNo',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      height: 1.3,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ))),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => parentedit()));
-                              },
-                              child: Container(
-                                  color: Color(0xFFCE5A67),
-                                  padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
-                                  margin: EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    'Edit',
-                                    style: TextStyle(color: Colors.black),
-                                  )))
-                        ]);
-                  });
-            }
-          }),
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 220,
+                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                    child: ElevatedButton(
+                      child: Text(
+                        "Edit",
+                        style: TextStyle(
+              color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WardenEdit()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFFCE5A67),
+                        shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20), // Add some space between buttons
+                  Container(
+                    width: 220,
+                    padding: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                    child: ElevatedButton(
+                      child: Text(
+                        "Log Out",
+                        style: TextStyle(
+              color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFFCE5A67),
+                        shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+                  ],
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }

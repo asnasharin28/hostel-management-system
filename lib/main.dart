@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: QrCodeScannerPage(),
+      home: Login_Page(),
       theme: ThemeData(scaffoldBackgroundColor: Color(0xFFFCF5ED)),
     );
   }

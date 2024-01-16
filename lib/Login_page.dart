@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/page/admin/admin.dart';
-
 import 'package:my_flutter_app/page/parent/parent.dart';
 import 'package:my_flutter_app/page/staff/staff2.dart';
 import 'package:my_flutter_app/page/student/student1.dart';

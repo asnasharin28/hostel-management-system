@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -12,6 +14,39 @@ class _QrCodeScannerPageState extends State<QrCodeScannerPage> {
   String result = "";
   bool isCheckedIn = false;
 
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    Future<DocumentSnapshot> getUserData(String userID) async {
+    return await FirebaseFirestore.instance
+        .collection('student')
+        .doc(userID)
+        .get();
+  }
+
+    Future<void> updateAttendanceInFirestore() async {
+    try {
+      // Assuming you have a collection named 'students' in Firestore
+      CollectionReference students = _firestore.collection('student');
+
+      // Replace 'STUDENT_ID' with the actual ID or a unique identifier of the student
+      String studentId = FirebaseAuth.instance.currentUser!.uid;
+
+      // Get the document reference for the specific student
+      DocumentReference studentRef = students.doc(studentId);
+
+      // Update the attendance field based on isCheckedIn status
+      await studentRef.update({'Attendance': isCheckedIn});
+
+      // Update the result text widget
+      setState(() {
+        result = isCheckedIn ? 'Checked In' : 'Checked Out';
+      });
+    } catch (e) {
+      print('Error updating attendance: $e');
+    }
+    }
+
+
   @override
   void dispose() {
     controller?.dispose();
@@ -23,8 +58,14 @@ class _QrCodeScannerPageState extends State<QrCodeScannerPage> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData.code!;
-        // Toggle the check-in status on each scan
-        isCheckedIn = !isCheckedIn;
+        // Check if the scanned QR code is correct before executing the method
+        if (result == 'NOTAHMSassd4035525') {
+          // Toggle the check-in status on each scan
+          isCheckedIn = !isCheckedIn;
+
+          // Run the method for the correct QR code
+          updateAttendanceInFirestore();
+        }
       });
     });
   }
